@@ -1,0 +1,12 @@
+{
+   <string_token1>
+   Memcheck:Cond
+   fun:index
+   fun:expand_dynamic_string_token
+}
+
+{
+   <string_token2>
+   Memcheck:Cond
+   fun:expand_dynamic_string_token
+}
