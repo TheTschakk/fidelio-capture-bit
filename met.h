@@ -22,10 +22,8 @@ struct image {
 struct meteor {
     int Nlght;
     int Nshdw;
-    int Nvtc;
     int *lght;
     int *shdw;
-    int *vtc;
     float posX;
     float posY;
     float posVar;
@@ -43,10 +41,8 @@ struct meteor {
 void addMeteor(struct meteor *met) {
     met->lght = calloc(MAXPIX, sizeof(int));
     met->shdw = calloc(MAXPIX, sizeof(int));
-    met->vtc = calloc(2*MAXPIX, sizeof(int));
     met->Nlght = 0;
     met->Nshdw = 0;
-    met->Nvtc = 0;
     met->prev = NULL;
     met->next = NULL;
     met->continuity = 0;
@@ -99,7 +95,6 @@ struct image *buildBuffer(int size){
 void initMeteor(struct meteor *met) {
     met->Nlght = 0;
     met->Nshdw = 0;
-    met->Nvtc = 0;
 
     met->prev = NULL;
     met->next = NULL;
@@ -110,7 +105,6 @@ void initMeteor(struct meteor *met) {
 void freeMeteor(struct meteor *met) {
     free(met->lght);
     free(met->shdw);
-    free(met->vtc);
 }
 
 void freeBuffer(struct image *img) {
@@ -258,7 +252,6 @@ int backTraceMeteor(struct meteor *met0) {
 	printf("%f\t", met->posY);
 	printf("%f\t", met->v2);
 	printf("%f\t", met->dir);
-	printf("%i\t", met->Nvtc);
 	printf("%i\t", met->duration);
 	printf("\n");
 	met = met->prev;
@@ -275,17 +268,14 @@ void printImage(struct image *img) {
     //printf("Nlgth %i | Nshdw %i || Nmet %i \n\n", img->Nlght, img->Nshdw, img->num);
 
     for (i=0; i<(img->num); i++) {
-	printf("meteor =%i= || num = %i | postion: X = %.1f, Y = %.1f | velocity: vx = %.2f, vy = %.2f, v2 = %.1f (R=%.4f) | continuity = %i | duration = %i\n", i, img->met[i]->Nvtc, img->met[i]->posX, img->met[i]->posY, img->met[i]->vx, img->met[i]->vy, img->met[i]->v2, img->met[i]->R, img->met[i]->continuity, img->met[i]->duration);
+	printf("meteor =%i= || num = %i | postion: X = %.1f, Y = %.1f | velocity: vx = %.2f, vy = %.2f, v2 = %.1f (R=%.4f) | continuity = %i | duration = %i\n", i, img->met[i]->Nlght + img->met[i]->Nshdw, img->met[i]->posX, img->met[i]->posY, img->met[i]->vx, img->met[i]->vy, img->met[i]->v2, img->met[i]->R, img->met[i]->continuity, img->met[i]->duration);
         /*
 	printf("LIGHT: ");
 	print1dArray(img->met[i]->lght, img->met[i]->Nlght);
 	printf("SHADOW: ");
 	print1dArray(img->met[i]->shdw, img->met[i]->Nshdw);
 	printf("\n");
-	print1dArray(img->met[i]->x, img->met[i]->Nvtc);
-	print1dArray(img->met[i]->y, img->met[i]->Nvtc);
         */
-	//if (img->met[i]->deg != NULL) print1dArray(img->met[i]->deg, img->met[i]->Nvtc);
 	printf("\n");
     }
 }

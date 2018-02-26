@@ -51,22 +51,15 @@ void getPosition(struct meteor *met) {
     float meanX=0, meanY=0;
     float meanX2=0, meanY2=0;
 
-    int N = met->Nvtc;
+    int N = met->Nlght + met->Nshdw;
     
-    /*
-    for (i=0; i<N; i++) {
-	meanX += (float) getX(met->vtc[i]);
-	meanX2 += (float) getX(met->vtc[i]) * getX(met->vtc[i]);
-	meanY += (float) getY(met->vtc[i]);
-	meanY2 += (float) getY(met->vtc[i]) * getY(met->vtc[i]);
-    }
-    */
     for (i=0; i<(met->Nlght); i++) {
 	meanX += (float) getX(met->lght[i]);
 	meanX2 += (float) getX(met->lght[i]) * getX(met->lght[i]);
 	meanY += (float) getY(met->lght[i]);
 	meanY2 += (float) getY(met->lght[i]) * getY(met->lght[i]);
     }
+
     for (i=0; i<(met->Nshdw); i++) {
 	meanX += (float) getX(met->shdw[i]);
 	meanX2 += (float) getX(met->shdw[i]) * getX(met->shdw[i]);

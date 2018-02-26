@@ -49,13 +49,9 @@ void cluster(struct image *img) {
                 case 3 :
                     img->num++;
                     img->met[img->num]->lght[img->met[img->num]->Nlght] = img->lght[l];
-                    img->met[img->num]->vtc[img->met[img->num]->Nvtc] = img->lght[l];
                     img->met[img->num]->Nlght++;
-                    img->met[img->num]->Nvtc++;
                     img->met[img->num]->shdw[img->met[img->num]->Nshdw] = img->shdw[s];
-                    img->met[img->num]->vtc[img->met[img->num]->Nvtc] = img->shdw[s];
                     img->met[img->num]->Nshdw++;
-                    img->met[img->num]->Nvtc++;
                     nl++; ns++;
             }
         }
@@ -67,8 +63,6 @@ void cluster(struct image *img) {
                         switchEle(img->lght, nl, i);
                         img->met[img->num]->lght[img->met[img->num]->Nlght] = img->lght[nl];
                         img->met[img->num]->Nlght++;
-                        img->met[img->num]->vtc[img->met[img->num]->Nvtc] = img->lght[nl];
-                        img->met[img->num]->Nvtc++;
                         nl++;
                         break;
                     }
@@ -84,8 +78,6 @@ void cluster(struct image *img) {
                         switchEle(img->shdw, ns, i);
                         img->met[img->num]->shdw[img->met[img->num]->Nshdw] = img->shdw[ns];
                         img->met[img->num]->Nshdw++;
-                        img->met[img->num]->vtc[img->met[img->num]->Nvtc] = img->shdw[ns];
-                        img->met[img->num]->Nvtc++;
                         ns++;
                         break;
                     }
