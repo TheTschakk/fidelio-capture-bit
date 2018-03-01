@@ -238,29 +238,6 @@ int endOfMeteor(struct image *img, int *dur, int depth) {
 
     return num;
 }
-    
-int backTraceMeteor(struct meteor *met0) {
-    int i=0;
-    struct meteor *met;
-    met = met0;
-
-    printf("input\t\tX\t\tY\t\txyVar\t\tvelo2\t\tdir\t\tDensity\t\tmDegree\tmWeight\tnum\tduration \n");
-
-    while (met != NULL) {
-	//printf("%s\t", input);
-	printf("%f\t", met->posX);
-	printf("%f\t", met->posY);
-	printf("%f\t", met->v2);
-	printf("%f\t", met->dir);
-	printf("%i\t", met->duration);
-	printf("\n");
-	met = met->prev;
-
-	i++;
-    }
-    printf("\n");
-    return i;
-}
 
 void printImage(struct image *img) {
     int i;

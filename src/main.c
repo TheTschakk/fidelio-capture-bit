@@ -12,8 +12,6 @@
 #include <time.h>
 #include <math.h>
 
-#define CLEAR(x) memset(&(x), 0, sizeof(x))
-
 #define HEIGHT 480
 #define WIDTH 720
 #define LENGTH HEIGHT*WIDTH
