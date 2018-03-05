@@ -21,12 +21,12 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int limit = 50;
+int delta = 50;
 int cutoff = 10;
 int depth = 3;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
-char *dev_name = "/dev/video1";
+char *dev_name = "/dev/video0";
 char cam_id = '0';
 const int buffer_size = 150;
 static int prefluff = 25;
@@ -46,14 +46,22 @@ void print1dArray(int *list, int dim);
 #include "analysis.h"
 #include "v4l2.h"
 #include "io.h"
+#include "ctrl.h"
 
 int mainloop (time_t exectime) {
-    int n=0;
+    int i,n=0;
     int found=0;
     int lifetime;
 
     time_t start = time(NULL);
     time_t end = start + exectime;
+
+	printf("filling buffer\n");
+	
+	for (i=0; i<buffer_size; i++) {
+		wait_for_frame();
+		frm = frm->next;
+	}
 
     while (time(NULL) < end) {
         printf("frame %i ################################################\n", frm->index);
@@ -62,6 +70,8 @@ int mainloop (time_t exectime) {
 
         if (found == 0)
             analyseFrame(frm);
+
+		adjustSensitivity(frm, 10, 0);
 
         if ( endOfMeteor(frm, &lifetime, 3) != -1 )
             found = lifetime;

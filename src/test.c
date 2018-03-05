@@ -12,9 +12,9 @@
 #define INT 32
 #define MAXPIX 1024
 #define SIZE (MAXPIX/INT)
-#define MAXMET 10
+#define MAXMET 100
 
-int limit = 50;
+int delta = 50;
 int cutoff = 10;
 int depth = 3;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
@@ -35,6 +35,7 @@ void print1dArray(int *list, int dim);
 #include "graph.h"
 #include "analysis.h"
 #include "io.h"
+#include "ctrl.h"
 
 static struct image *frm = NULL;
 
@@ -51,6 +52,7 @@ int mainloop(void) {
 
         clock_gettime(CLOCK_REALTIME, &reftime);
         analyseFrame(frm);
+		adjustSensitivity(frm, buffer_size, 10); 
         clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
         /*

@@ -3,7 +3,7 @@
 unsigned int blockL;
 unsigned int blockS;
 
-extern int limit;
+extern int delta;
 extern int cutoff;
 extern int depth;
 
@@ -25,7 +25,8 @@ int analyseFrame(struct image *img) {
 
     initFrame(img);
 
-    if ( identifyPix(img, limit) ) return 1; // build lists of bright (>0) and dark (<0) pixels from sub
+    if ( identifyPix(img, delta) ) return 1; // build lists of bright (>0) and dark (<0) pixels from sub
+    printf("nl %i ns %i\n", img->Nlght, img->Nshdw);
     
     clock_gettime(CLOCK_REALTIME, &systime); printf("identifyPix %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
@@ -36,7 +37,6 @@ int analyseFrame(struct image *img) {
 
     clock_gettime(CLOCK_REALTIME, &systime); printf("buildAdj %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
-    //printf("nl %i ns %i\n", img->Nlght, img->Nshdw);
     //print1dArray(img->lght, img->Nlght);
     //print1dArray(img->shdw, img->Nshdw);
 
