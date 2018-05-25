@@ -15,8 +15,8 @@
 #define MAXMET 10
 
 int limit = 50;
-int cutoff = 10;
-int depth = 3;
+int cutoff = 4;
+int depth = 3; // WAS 3 BEFORE
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 static char *input;
@@ -47,16 +47,19 @@ int mainloop(void) {
     struct timespec systime, reftime;
 
     while (1) {
-        printf("frame %i ################################################\n", frm->index);
+        //printf("frame %i ################################################\n", frm->index);
 
         clock_gettime(CLOCK_REALTIME, &reftime);
         analyseFrame(frm);
-        clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+        //clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+
+        if ( endOfMeteor(frm, &lifetime, depth) != -1 ) {
+           found = lifetime;
+           printData(frm->prev->prev->prev);
+        }
 
         /*
-           if ( endOfMeteor(frm, &lifetime, depth) != -1 )
-           found = lifetime;
-           */
+        */
 
         if (found > 0)
             n++;
@@ -70,7 +73,7 @@ int mainloop(void) {
             sleep(5);
         }
 
-        printImage(frm);
+        //printImage(frm);
 
         frm = frm->next;
 

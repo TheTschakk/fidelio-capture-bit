@@ -14,7 +14,7 @@ void buildAdj(struct image *img, int dist) {
     }
 }
 
-void cluster(struct image *img) {
+void findCluster(struct image *img) {
     int i,j;
     int l=0, s=0;
     int nl=0, ns=0;

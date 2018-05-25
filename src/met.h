@@ -1,5 +1,5 @@
 
-#ifdef math_h
+#ifndef math_h
 #include <math.h>
 #endif
 
@@ -31,7 +31,7 @@ struct meteor {
     float vy;
     float v2;
     float R;
-    float dir;
+    float direction;
     int continuity;
     int duration;
     struct meteor *prev;
@@ -215,7 +215,7 @@ void getVelocity(struct meteor *met0) {
     met0->v2 = vx*vx + vy*vy;
     met0->R = Rx*Ry;
 
-    met0->dir = atan2(vx, vy);
+    met0->direction = atan2(vx, vy);
 }
 
 int endOfMeteor(struct image *img, int *dur, int depth) {
@@ -253,7 +253,7 @@ void printImage(struct image *img) {
 	print1dArray(img->met[i]->shdw, img->met[i]->Nshdw);
 	printf("\n");
         */
-	printf("\n");
+	//printf("\n");
     }
 }
 

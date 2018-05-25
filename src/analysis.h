@@ -27,14 +27,14 @@ int analyseFrame(struct image *img) {
 
     if ( identifyPix(img, limit) ) return 1; // build lists of bright (>0) and dark (<0) pixels from sub
     
-    clock_gettime(CLOCK_REALTIME, &systime); printf("identifyPix %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+    //clock_gettime(CLOCK_REALTIME, &systime); printf("identifyPix %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
     blockL = img->Nshdw / INT + (img->Nshdw % INT != 0);
     blockS = img->Nlght / INT + (img->Nlght % INT != 0);
 
     buildAdj(img, cutoff);
 
-    clock_gettime(CLOCK_REALTIME, &systime); printf("buildAdj %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+    //clock_gettime(CLOCK_REALTIME, &systime); printf("buildAdj %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
     //printf("nl %i ns %i\n", img->Nlght, img->Nshdw);
     //print1dArray(img->lght, img->Nlght);
@@ -44,14 +44,14 @@ int analyseFrame(struct image *img) {
     //printf("\n");
     //printf("bl %i bs %i\n", blockL, blockS);
     //printf("%u %u %u\n", img->adjL[0], img->adjL[1], img->adjL[2]);
-    cluster(img);
+    findCluster(img);
     //print2dBitArray(img->adjL, img->Nlght, img->Nshdw);
 
-    clock_gettime(CLOCK_REALTIME, &systime); printf("cluster %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+    //clock_gettime(CLOCK_REALTIME, &systime); printf("cluster %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
     analyseMeteors(img);
 
-    clock_gettime(CLOCK_REALTIME, &systime); printf("analyseMeteor %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+    //clock_gettime(CLOCK_REALTIME, &systime); printf("analyseMeteor %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
     return 0;
 }

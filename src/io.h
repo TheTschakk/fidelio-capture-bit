@@ -40,3 +40,27 @@ int write_video(struct image *last, int nfrms) {
     return 0;
 }
 
+void printData(struct image *img) {
+    int i, j;
+    float N[MAXMET];
+
+    struct meteor *met = NULL;
+
+    for (i=0; i<(img->num); i++) {
+        met = img->met[i];
+        //while ( img != NULL ) {
+        N[i] = 0;
+        for (j=0; j<(img->met[i]->duration); j++) {
+            N[i] += met->Nlght + met->Nshdw;
+            met = met->prev;
+        }
+        N[i] /= img->met[i]->duration;
+    }
+    /*
+    */
+
+    for (i=0; i<(img->num); i++) {
+	printf("%f %.4f %.4f %.4f %i\n", N[i], img->met[i]->v2, img->met[i]->R, img->met[i]->direction, img->met[i]->duration);
+    }
+}
+

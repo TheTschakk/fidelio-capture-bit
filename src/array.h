@@ -37,3 +37,14 @@ void print1dArray(int *list, int dim) {
     }
     printf("\n");
 }
+
+/*
+void printBits(unsigned int *A, int start, int length) {
+    int i;
+
+    for (i=0; i<length; i++) {
+        printf("%i ", getBit(A, start+i));
+    }
+    printf("\n");
+}
+*/
