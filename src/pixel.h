@@ -26,14 +26,14 @@ int identifyPix(struct image *img, int lim) {
 	diff = img->data[i] - img->prev->data[i];
 
 	if ( (diff > lim) && inFrame(i) ) {
-            if ( img->Nlght == MAXPIX ) return -1;
 	    img->lght[img->Nlght] = i;
-	    img->Nlght++;
+            if ( img->Nlght++ == MAXPIX ) return -1;
+	    //img->Nlght++;
 	}
 	else if ( (diff < -lim) && inFrame(i) ) {
-            if ( img->Nshdw == MAXPIX ) return -1;
 	    img->shdw[img->Nshdw] = i;
-	    img->Nshdw++;
+            if ( img->Nshdw++ == MAXPIX ) return -1;
+	    //img->Nshdw++;
 	}
     }
 
