@@ -14,15 +14,10 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-<<<<<<< HEAD
-int limit = 50;
-int cutoff = 4;
-int depth = 3; // WAS 3 BEFORE
-=======
+//int limit = 50;
 int delta = 50;
 int cutoff = 10;
 int depth = 3;
->>>>>>> 3c7c5f151654d0b065fe0ce620606589330c1291
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 static char *input;
@@ -58,12 +53,9 @@ int mainloop(void) {
 
         clock_gettime(CLOCK_REALTIME, &reftime);
         analyseFrame(frm);
-<<<<<<< HEAD
-        //clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
-=======
+
 		adjustSensitivity(frm, buffer_size, 10); 
         clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
->>>>>>> 3c7c5f151654d0b065fe0ce620606589330c1291
 
         if ( endOfMeteor(frm, &lifetime, depth) != -1 ) {
            found = lifetime;
