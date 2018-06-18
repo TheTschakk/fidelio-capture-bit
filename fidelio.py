@@ -23,6 +23,9 @@ print("current time: " + str(current))
 print("next sunset: " + str(sunset))
 print("next sunrise: " + str(sunrise))
 
+night = 60
+
+"""
 # checks if night already has begun when routine is called
 
 if (sunrise-sunset) > 0:
@@ -34,6 +37,7 @@ if (sunrise-sunset) > 0:
 else:
     print("The Sun has already set! Immediately starting observation!")
     night = int((sunrise-current) * 24 * 3600)
+"""
 
 # starting observation
 

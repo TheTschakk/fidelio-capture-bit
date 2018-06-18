@@ -54,12 +54,14 @@ int mainloop(void) {
         clock_gettime(CLOCK_REALTIME, &reftime);
         analyseFrame(frm);
 
-		adjustSensitivity(frm, buffer_size, 10); 
-        clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
+        if ( frm->index == 1 )
+            adjustSensitivity(frm, buffer_size, 30); 
+
+        //clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
         if ( endOfMeteor(frm, &lifetime, depth) != -1 ) {
-           found = lifetime;
-           printData(frm->prev->prev->prev);
+            found = lifetime;
+            //printData(frm->prev->prev->prev);
         }
 
         /*
@@ -74,21 +76,22 @@ int mainloop(void) {
             //write_video(frm, (prefluff + found + postfluff));
             n = 0;
             found = 0;
-            sleep(5);
+            //sleep(5);
         }
 
         //printImage(frm);
 
         frm = frm->next;
 
-        if (frm->index == buffer_size)
-            return 1;
+        //if (frm->index == buffer_size)
+            //return 1;
     }
     return 0;
 }
 
 
 int main(int argc,char* argv[]){
+    printf("FOOOOOOOOO!\n");
     input = argv[1];
     frm = buildBuffer(buffer_size); // generate cyclicalc buffer of size "buffer_size" frames
     read_video(input, frm); // invoke the read_video() function in order to fill generated buffer with frames from "input"
