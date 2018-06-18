@@ -22,6 +22,7 @@
 #define MAXMET 100
 
 int delta = 50;
+int adj_rate = 10;
 int cutoff = 10;
 int depth = 3;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
@@ -64,14 +65,15 @@ int mainloop (time_t exectime) {
 	}
 
     while (time(NULL) < end) {
-        printf("frame %i ################################################\n", frm->index);
+        //printf("frame %i ################################################\n", frm->index);
         wait_for_frame();
         clock_gettime(CLOCK_REALTIME, &(frm->time));
 
         if (found == 0)
             analyseFrame(frm);
 
-		adjustSensitivity(frm, 10, 0);
+        if ( (frm->index % 10) == 0 )
+            adjustSensitivity(frm, 10, 0);
 
         if ( endOfMeteor(frm, &lifetime, 3) != -1 )
             found = lifetime;
@@ -102,6 +104,7 @@ int main(int argc, char* argv[]) {
 
     sscanf(argv[1], "%i", &time_int);
     time = time_int;
+    dev_name = argv[2];
 
     frm = buildBuffer(buffer_size);
 

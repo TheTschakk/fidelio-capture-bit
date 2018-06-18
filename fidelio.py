@@ -26,7 +26,7 @@ print("next sunrise: " + str(sunrise))
 night = 60
 
 """
-# checks if night already has begun when routine is called
+# checks if night already has begun when routine is called and if necessary shortens "night" parameter
 
 if (sunrise-sunset) > 0:
     night = int((sunrise-sunset) * 24 * 3600)
@@ -42,7 +42,7 @@ else:
 # starting observation
 
 GPIO.output(11, GPIO.HIGH)
-#subprocess.call(["./fidelio", dev, night])
+subprocess.call(["./main", dev, str(night)])
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
 

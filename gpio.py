@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -7,7 +9,7 @@ GPIO.setup(18, GPIO.IN)
 
 GPIO.output(11, GPIO.HIGH)
 
-sleep(10)
+sleep(100)
 
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
