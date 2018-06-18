@@ -66,13 +66,14 @@ int mainloop (time_t exectime) {
 
     while (time(NULL) < end) {
         //printf("frame %i ################################################\n", frm->index);
+        printf("time %li/%li sec\n", time(NULL)-start, end-start);
         wait_for_frame();
         clock_gettime(CLOCK_REALTIME, &(frm->time));
 
         if (found == 0)
             analyseFrame(frm);
 
-        if ( (frm->index % 10) == 0 )
+        if ( (frm->index % adj_rate) == 0 )
             adjustSensitivity(frm, 10, 0);
 
         if ( endOfMeteor(frm, &lifetime, 3) != -1 )
@@ -107,6 +108,7 @@ int main(int argc, char* argv[]) {
     dev_name = argv[2];
 
     frm = buildBuffer(buffer_size);
+    printf("%s!\n", dev_name);
 
     fd = open(dev_name, O_RDWR | O_NONBLOCK, 0);
 
