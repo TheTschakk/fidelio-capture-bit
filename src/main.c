@@ -85,7 +85,7 @@ int mainloop (time_t exectime) {
             n = 0;
 
         if (n > postfluff) {
-            write_video(frm, (prefluff + found + postfluff));
+            //write_video(frm, (prefluff + found + postfluff));
             n = 0;
             found = 0;
         }
