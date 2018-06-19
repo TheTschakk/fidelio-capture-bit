@@ -95,6 +95,9 @@ int mainloop (time_t exectime) {
 
         frm = frm->next;
     }
+
+    printf("time condition is false: %i\n", (time(NULL) < end));
+
     return 0;
 }
 
@@ -105,7 +108,9 @@ int main(int argc, char* argv[]) {
 
     sscanf(argv[1], "%i", &time_int);
     time = time_int;
-    dev_name = argv[2];
+    
+    if ( argc > 2 )
+        dev_name = argv[2];
 
     frm = buildBuffer(buffer_size);
     printf("%s!\n", dev_name);

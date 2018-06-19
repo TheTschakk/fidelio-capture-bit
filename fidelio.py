@@ -8,6 +8,7 @@ import datetime
 import time
 import subprocess
 import ephem
+import os
 
 observer = ephem.Observer()
 
@@ -24,8 +25,9 @@ print("current time: " + str(current))
 print("next sunset: " + str(sunset))
 print("next sunrise: " + str(sunrise))
 
-night = 60
+night = 1000
 
+"""
 # checks if night already has begun when routine is called and if necessary shortens "night" parameter
 
 if (sunrise-sunset) > 0:
@@ -38,14 +40,14 @@ else:
     print("The Sun has already set! Immediately starting observation!")
     night = int((sunrise-current) * 24 * 3600)
 """
-"""
 
 # starting observation
 
 print("scheduled night length: " + str(night) + " sec")
 
 GPIO.output(11, GPIO.HIGH)
-subprocess.call([path, str(night), dev])
+print(subprocess.call([path, str(night), dev]))
+#os.system(path + " " + str(night) + " " + dev)
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
 
