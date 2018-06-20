@@ -15,7 +15,8 @@ observer = ephem.Observer()
 observer.lat = '49.869802'
 observer.lon = '8.778283'
 dev = "/dev/video0"
-path = "/home/jakob/fidelio-capture-bit/main"
+#path = "/home/jakob/fidelio-capture-bit/main"
+exe = "/home/jakob/fidelio-capture-bit/run.sh"
 
 current = ephem.now()
 sunset = observer.next_setting(ephem.Sun())
@@ -47,8 +48,7 @@ print("scheduled night length: " + str(night) + " sec")
 
 GPIO.output(11, GPIO.HIGH)
 #print(subprocess.call([path, str(night), dev]))
-print(subprocess.call(["/home/jakob/fidelio-capture-bit/run.sh", str(night), dev]))
-#os.system(path + " " + str(night) + " " + dev)
+subprocess.call([exe, str(night), dev])
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
 

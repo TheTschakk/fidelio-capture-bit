@@ -96,8 +96,6 @@ int mainloop (time_t exectime) {
         frm = frm->next;
     }
 
-    printf("time condition is false: %i\n", (time(NULL) < end));
-
     return 0;
 }
 
