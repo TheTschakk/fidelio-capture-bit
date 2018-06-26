@@ -66,7 +66,7 @@ int mainloop (time_t exectime) {
 
     while (time(NULL) < end) {
         //printf("frame %i ################################################\n", frm->index);
-        printf("time %li/%li sec\n", time(NULL)-start, end-start);
+        //printf("time %li/%li sec\n", time(NULL)-start, end-start);
         wait_for_frame();
         clock_gettime(CLOCK_REALTIME, &(frm->time));
 
@@ -76,8 +76,10 @@ int mainloop (time_t exectime) {
         if ( (frm->index % adj_rate) == 0 )
             adjustSensitivity(frm, 10, 0);
 
-        if ( endOfMeteor(frm, &lifetime, 3) != -1 )
+        if ( endOfMeteor(frm, &lifetime, 3) != -1 ) {
+            printData(frm->prev->prev->prev);
             found = lifetime;
+        }
 
         if (found > 0)
             n++;
@@ -85,7 +87,7 @@ int mainloop (time_t exectime) {
             n = 0;
 
         if (n > postfluff) {
-            //write_video(frm, (prefluff + found + postfluff));
+            write_video(frm, (prefluff + found + postfluff));
             n = 0;
             found = 0;
         }
