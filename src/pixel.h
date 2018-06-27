@@ -14,7 +14,8 @@ int inFrame(int index) {
     int y = getY(index);
 
     if ( (x > margins[0]) && (x < margins[1]) && (y > margins[2]) && (y < margins[3]) )
-	return 1;
+        return 1;
+
     return 0;
 }
 
@@ -27,12 +28,12 @@ int identifyPix(struct image *img, int lim) {
 
 	if ( (diff > lim) && inFrame(i) ) {
 	    img->lght[img->Nlght] = i;
-            if ( img->Nlght++ == MAXPIX ) return -1;
+            if ( ++img->Nlght >= MAXPIX ) return -1;
 	    //img->Nlght++;
 	}
 	else if ( (diff < -lim) && inFrame(i) ) {
 	    img->shdw[img->Nshdw] = i;
-            if ( img->Nshdw++ == MAXPIX ) return -1;
+            if ( ++img->Nshdw >= MAXPIX ) return -1;
 	    //img->Nshdw++;
 	}
     }

@@ -50,17 +50,35 @@ void printData(struct image *img) {
         met = img->met[i];
         //while ( img != NULL ) {
         N[i] = 0;
-        for (j=0; j<(img->met[i]->duration); j++) {
+        //for (j=0; j<(img->met[i]->duration); j++) {
+        do {
             N[i] += met->Nlght + met->Nshdw;
             met = met->prev;
-        }
+        } while ( met != NULL );
+
         N[i] /= img->met[i]->duration;
     }
     /*
     */
 
     for (i=0; i<(img->num); i++) {
-	printf("%f %.4f %.4f %.4f %i\n", N[i], img->met[i]->v2, img->met[i]->R, img->met[i]->direction, img->met[i]->duration);
+        printf("%f %.4f %.4f %.4f %i\n", N[i], img->met[i]->v2, img->met[i]->R, img->met[i]->direction, img->met[i]->duration);
     }
+
+    // print to log
+
+    char timestamp[20];
+    char event[50];
+    strftime(timestamp, 100, "%Y%m%d_%H%M%S", gmtime(&(img->time.tv_sec)));
+    sprintf(event, "%c-%s_%03ld",cam_id, timestamp, img->time.tv_nsec / 1000000);
+
+    FILE *f = fopen("log.txt", "a");
+    fprintf(f, "%s:\n", event);
+
+    for (i=0; i<(img->num); i++) {
+        fprintf(f, "%f %.4f %.4f %.4f %i\n", N[i], img->met[i]->v2, img->met[i]->R, img->met[i]->direction, img->met[i]->duration);
+    }
+
+    fclose(f);
 }
 

@@ -33,7 +33,7 @@ void findCluster(struct image *img) {
             }
 
             for (j=0; j<blockS; j++) {
-                if (img->adjS[s*blockS + j]) {
+                if (img->adjS[s*blockS + j]) { // something wrong at small delta
                     zero += 2;
                     break;
                 }
@@ -47,7 +47,11 @@ void findCluster(struct image *img) {
                 case 2 :
                     l++; nl++; continue;
                 case 3 :
-                    img->num++;
+                    if ( ++img->num >= MAXMET ) { // avoid meteor overflow
+                        --img->num;
+                        return;
+                    }
+                    //printf("%i:%p/%p ", img->num, &(img->lght[l]), &(img->met[img->num]->Nlght));
                     img->met[img->num]->lght[img->met[img->num]->Nlght] = img->lght[l];
                     img->met[img->num]->Nlght++;
                     img->met[img->num]->shdw[img->met[img->num]->Nshdw] = img->shdw[s];
