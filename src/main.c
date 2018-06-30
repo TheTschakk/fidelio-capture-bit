@@ -22,7 +22,7 @@
 #define MAXMET 100
 
 int delta = 50;
-int adj_rate = 10;
+int adj_rate = 150;
 int cutoff = 10;
 int depth = 3;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
@@ -87,6 +87,7 @@ int mainloop (time_t exectime) {
             n = 0;
 
         if (n > postfluff) {
+            printf("save video");
             write_video(frm, (prefluff + found + postfluff));
             n = 0;
             found = 0;
