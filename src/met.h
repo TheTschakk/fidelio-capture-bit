@@ -236,10 +236,11 @@ int endOfMeteor(struct image *img, int *dur, int depth) {
         }
     }
 
-    if ( num == -1 ) return -1;
-    if ( isnan(ref->met[num]->v2) ) return -1;
-    //if ( !(ref->met[num]->v2 == ref->met[num]->v2) ) printf("FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"); //return -1;
-    //printf("GOOOOOOO %f\n", ref->met[num]->v2);
+    if ( num == -1 )
+        return -1;
+
+    if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) || ( ref->met[num]->v2 < 1 ) )
+        return -1;
 
     return num;
 }
