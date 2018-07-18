@@ -29,7 +29,7 @@ int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom ma
 
 char *dev_name = "/dev/video0";
 char cam_id = '0';
-const int buffer_size = 900;
+const int buffer_size = 600;
 static int prefluff = 25;
 static int postfluff = 25;
 
