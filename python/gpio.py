@@ -9,7 +9,7 @@ GPIO.setup(18, GPIO.IN)
 
 GPIO.output(11, GPIO.HIGH)
 
-sleep(100)
+sleep(10)
 
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()

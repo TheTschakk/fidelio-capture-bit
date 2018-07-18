@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
@@ -14,9 +14,11 @@ observer = ephem.Observer()
 
 observer.lat = '49.869802'
 observer.lon = '8.778283'
-dev = "/dev/video0"
-#path = "/home/jakob/fidelio-capture-bit/main"
-exe = "/home/jakob/fidelio-capture-bit/run.sh"
+dev = os.environ["METDEV"] # "/dev/video0"
+exe = os.environ["METHOME"] + "/bash/run.sh" # "/home/pi/fidelio-capture-bit/run.sh"
+
+print(exe)
+print(dev)
 
 current = ephem.now()
 sunset = observer.next_setting(ephem.Sun())
@@ -47,7 +49,6 @@ else:
 print("scheduled night length: " + str(night) + " sec")
 
 GPIO.output(11, GPIO.HIGH)
-#print(subprocess.call([path, str(night), dev]))
 subprocess.call([exe, str(night), dev])
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
