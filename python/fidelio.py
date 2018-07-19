@@ -17,8 +17,7 @@ observer.lon = '8.778283'
 dev = os.environ["METDEV"] # "/dev/video0"
 exe = os.environ["METHOME"] + "/bash/run.sh" # "/home/pi/fidelio-capture-bit/run.sh"
 
-print(exe)
-print(dev)
+print("device: " + dev)
 
 current = ephem.now()
 sunset = observer.next_setting(ephem.Sun())
