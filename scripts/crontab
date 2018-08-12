@@ -1,2 +1,2 @@
-@reboot tmux new -s fidelio
-00 12 * * * /home/pi/fidelio-capture-bit/startup.sh
+@reboot /home/pi/fidelio-capture-bit/bash/screen.sh
+00 12 * * * /home/pi/fidelio-capture-bit/bash/startup.sh
