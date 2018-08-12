@@ -24,7 +24,7 @@
 int delta = 50;
 int adj_rate = 150;
 int cutoff = 10;
-int depth = 3;
+int depth = 2;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0";

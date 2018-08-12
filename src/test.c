@@ -17,7 +17,7 @@
 //int limit = 50;
 int delta = 50;
 int cutoff = 10;
-int depth = 3;
+int depth = 2;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 static char *input;
@@ -79,7 +79,7 @@ int mainloop(void) {
             //sleep(5);
         }
 
-        //printImage(frm);
+        printImage(frm);
 
         frm = frm->next;
 
@@ -91,7 +91,6 @@ int mainloop(void) {
 
 
 int main(int argc,char* argv[]){
-    printf("FOOOOOOOOO!\n");
     input = argv[1];
     frm = buildBuffer(buffer_size); // generate cyclicalc buffer of size "buffer_size" frames
     read_video(input, frm); // invoke the read_video() function in order to fill generated buffer with frames from "input"
