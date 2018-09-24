@@ -76,8 +76,8 @@ int mainloop (time_t exectime) {
         if ( (frm->index % adj_rate) == 0 )
             adjustSensitivity(frm, 10, 0);
 
-        if ( endOfMeteor(frm, &lifetime, 3) != -1 ) {
-            printData(frm->prev->prev->prev);
+        if ( endOfMeteor(frm, &lifetime, 3) != -1 ) { // SHOULD BE "DEPTH" NOT "3" XYXYXYXY CHANGE CHANGE DEFCON 3.141
+            printData(frm->prev->prev->prev); // CHANGE TO prev->prev DEFCON 2.71
             found = lifetime;
         }
 
