@@ -48,20 +48,21 @@ int mainloop(void) {
 
     struct timespec systime, reftime;
 
-    while (1) {
+    while (frm->index < (buffer_size - 1)) {
         //printf("frame %i ################################################\n", frm->index);
 
         clock_gettime(CLOCK_REALTIME, &reftime);
         analyseFrame(frm);
 
-        if ( frm->index == 1 )
-            adjustSensitivity(frm, buffer_size, 30); 
+        //if ( frm->index == 1 )
+            //adjustSensitivity(frm, buffer_size, 30); 
 
         //clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
         if ( endOfMeteor(frm, &lifetime, depth) != -1 ) {
             found = lifetime;
-            //printData(frm->prev->prev->prev);
+            printData(frm->prev->prev);
+            exit(0);
         }
 
         /*
@@ -79,13 +80,14 @@ int mainloop(void) {
             //sleep(5);
         }
 
-        printImage(frm);
+        //printImage(frm);
 
         frm = frm->next;
 
         //if (frm->index == buffer_size)
             //return 1;
     }
+    printData(frm->prev->prev);
     return 0;
 }
 
