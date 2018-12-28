@@ -52,3 +52,5 @@ subprocess.call([exe, str(night), dev])
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()
 
+os.system('python3 classify.py')
+
