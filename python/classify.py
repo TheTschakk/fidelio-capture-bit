@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import SVC
 from datetime import date
 import numpy as np
