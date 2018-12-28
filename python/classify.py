@@ -17,7 +17,7 @@ for round in [0,1]:
         for i, line in enumerate(lines):
             if i%2 == 0: #if index is not odd (eg. first line, thrid line ...)
                 params = lines[i+1]
-                params = np.genfromtxt(params)
+                params = np.genfromtxt(params, delimeter=' ')
                 group = clf.predict(params)
                 if group == 0:
                     os.system('mv ' + path + line + ' ' + path + 'planes/')
