@@ -21,7 +21,7 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int delta = 50;
+int delta = 100;
 int adj_rate = 150;
 int cutoff = 10;
 int depth = 2;
@@ -87,7 +87,7 @@ int mainloop (time_t exectime) {
             n = 0;
 
         if (n > postfluff) {
-            printf("save video");
+            printf("saving video\n");
             write_video(frm, (prefluff + found + postfluff));
             n = 0;
             found = 0;
