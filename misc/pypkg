@@ -1,3 +1,5 @@
 RPi.GPIO
 ephem
 numpy
+SVC
+sklearn

@@ -2,5 +2,5 @@ git
 vim
 python3-pip
 tmux
-
+libatlas-base-devel
 
