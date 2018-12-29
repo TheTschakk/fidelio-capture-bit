@@ -23,7 +23,7 @@ int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom ma
 static char *input;
 char cam_id = '0';
 const int buffer_size = 150;
-static int prefluff = 25;
+//static int prefluff = 25;
 static int postfluff = 25;
 
 void switchEle(int *list, int item1, int item2);

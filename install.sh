@@ -2,7 +2,7 @@
 
 ## compile C code ###
 
-gcc -o test src/test.c -O3 -g -lm -Wall
+#gcc -o test src/test.c -O3 -g -lm -Wall
 gcc -o main src/main.c -O3 -g -lm -Wall
 
 

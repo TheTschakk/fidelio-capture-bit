@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ~/metconf
+#source "$METHOME/misc/metconf"
 
 DATE=$(date) 
 echo "start-up at: $DATE" >> $HOME/log
