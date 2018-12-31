@@ -14,7 +14,7 @@ with open(path + 'log.txt') as f:
     f = f.read()
     lines = f.split('\n')
     for i, line in enumerate(lines):
-        if i%2 == 0: #if index is not odd (eg. first line, thrid line ...)
+        if ':' in line:
             params = lines[i+1]
             params = np.genfromtxt(params, delimiter=' ')
             group = clf.predict(params)
@@ -22,4 +22,3 @@ with open(path + 'log.txt') as f:
                 os.system('mv ' + path + line + ' ' + path + 'planes/')
             else:
                 os.system('mv ' + path + line + ' ' + path + 'meteors/')
-
