@@ -14,12 +14,17 @@ with open(path + 'log.txt') as f:
     f = f.read()
     lines = f.split('\n')
     for i, line in enumerate(lines):
-        if i%2 == 0: #if index is not odd (eg. first line, thrid line ...)
-            params = lines[i+1]
-            params = np.genfromtxt(params, delimiter=' ')
-            group = clf.predict(params)
-            if group == 0:
-                os.system('mv ' + path + line + ' ' + path + 'planes/')
-            else:
-                os.system('mv ' + path + line + ' ' + path + 'meteors/')
-
+        if ':' in line:
+            params = []
+            r = 1
+            while ':' not in lines[i+r] and i+r < len(lines):
+                params.append(lines[i+r])
+                r += 1
+            for param in params:
+                param = np.genfromtxt(param, delimiter=' ')
+                group = clf.predict(params)
+                if group == 0:
+                    os.system('mv ' + path + line + ' ' + path + 'other/')
+                    break
+                else:
+                    os.system('mv ' + path + line + ' ' + path + 'meteors/')
