@@ -21,7 +21,10 @@ with open(path + 'log.txt') as f:
                 params.append(lines[i+r])
                 r += 1
             for param in params:
-                param = np.genfromtxt(param, delimiter=' ')
+                values = param.split(' ')
+                for j in range(len(values)):
+                    values[i] = float(values[i])
+                values = np.array(values)
                 group = clf.predict(params)
                 if group == 0:
                     os.system('mv ' + path + line + ' ' + path + 'other/')
