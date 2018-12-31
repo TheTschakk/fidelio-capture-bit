@@ -25,7 +25,7 @@ with open(path + 'log.txt') as f:
                 for j in range(len(values)):
                     values[i] = float(values[i])
                 values = np.array(values)
-                group = clf.predict(params)
+                group = SVC.clf.predict(params)
                 if group == 0:
                     os.system('mv ' + path + line + ' ' + path + 'other/')
                     break
