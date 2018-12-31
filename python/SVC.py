@@ -24,7 +24,7 @@ with open('trainingsdaten/meteor2.dat') as file1:
 
 #classify with libary
 from sklearn import svm
-clf = svm.SVC(C=10000)
+clf = svm.SVC(C=10000, gamma='scale')
 clf.fit(X,Y)
 
 
