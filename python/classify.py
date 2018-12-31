@@ -15,10 +15,16 @@ with open(path + 'log.txt') as f:
     lines = f.split('\n')
     for i, line in enumerate(lines):
         if ':' in line:
-            params = lines[i+1]
-            params = np.genfromtxt(params, delimiter=' ')
-            group = clf.predict(params)
-            if group == 0:
-                os.system('mv ' + path + line + ' ' + path + 'planes/')
-            else:
-                os.system('mv ' + path + line + ' ' + path + 'meteors/')
+            params = []
+            r = 1
+            while ':' not in lines[i+r] and i+r < len(lines):
+                params.append(lines[i+r])
+                r += 1
+            for param in params:
+                param = np.genfromtxt(param, delimiter=' ')
+                group = clf.predict(params)
+                if group == 0:
+                    os.system('mv ' + path + line + ' ' + path + 'other/')
+                    break
+                else:
+                    os.system('mv ' + path + line + ' ' + path + 'meteors/')
