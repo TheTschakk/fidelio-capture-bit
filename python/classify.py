@@ -4,12 +4,9 @@ import SVC
 from datetime import date, timedelta
 import numpy as np
 import os
+import sys
 
-today = date.today()
-
-day = today - timedelta(days=1)
-day = day.isoformat()
-path = '/home/pi/videos/' + day + '/'
+path = sys.argv[1]
 with open(path + 'log.txt') as f:
     f = f.read()
     lines = f.split('\n')
