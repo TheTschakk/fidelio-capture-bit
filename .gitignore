@@ -1,3 +1,4 @@
 *.bwv
 *.avi
-TEST*
+test*
+__*
