@@ -23,10 +23,13 @@ with open(path + 'log.txt') as f:
                 values = param.split(' ')
                 for j in range(len(values)):
                     values[j] = float(values[j])
-                values = np.array([values])
-                group = SVC.clf.predict(values)
-                if group == 0:
-                    os.system('mv ' + path + line[:-1] + ' ' + path + 'others/')
+                    if values[j] == float('NaN') or values[j] == float('Inf'):
+                        break
                 else:
-                    os.system('mv ' + path + line[:-1] + ' ' + path + 'meteors/')
-                    break
+                    values = np.array([values])
+                    group = SVC.clf.predict(values)
+                    if group == 0:
+                        os.system('mv ' + path + line[:-1] + ' ' + path + 'others/')
+                    else:
+                        os.system('mv ' + path + line[:-1] + ' ' + path + 'meteors/')
+                        break

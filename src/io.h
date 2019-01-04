@@ -67,7 +67,7 @@ void printData(struct image *img) {
     char timestamp[20];
     char event[50];
     strftime(timestamp, 100, "%Y%m%d_%H%M%S", gmtime(&(img->time.tv_sec)));
-    sprintf(event, "%c-%s_%03ld",cam_id, timestamp, img->time.tv_nsec / 1000000);
+    sprintf(event, "%c_%s_%03ld",cam_id, timestamp, img->time.tv_nsec / 1000000);
 
     FILE *f = fopen("log.txt", "a");
     fprintf(f, "%s:\n", event);
