@@ -218,31 +218,29 @@ void getVelocity(struct meteor *met0) {
     met0->direction = atan2(vx, vy);
 }
 
-int endOfMeteor(struct image *img, int *dur, int depth) {
+int endOfMeteor(struct image *img, int depth) {
     int i;
     int num=-1;
-    *dur = 0;
+    int dur=0;
 
     struct image *ref = img;
 
-    for (i=0; i<depth; i++) {
-        ref = ref->prev;
-    }
+    ref = revertFrames(ref, depth);
 
     for (i=0; i<(ref->num); i++) {
-        if ( (ref->met[i]->next == NULL) && (ref->met[i]->prev != NULL) && (ref->met[i]->duration > *dur) ) {
+        if ( (ref->met[i]->next == NULL) && (ref->met[i]->prev != NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
-            *dur = ref->met[num]->duration;
+            dur = ref->met[num]->duration;
         }
     }
 
     if ( num == -1 )
-        return -1;
+        return 0;
 
     if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) || ( ref->met[num]->v2 < 1 ) )
-        return -1;
+        return 0;
 
-    return num;
+    return dur;
 }
 
 void printImage(struct image *img) {

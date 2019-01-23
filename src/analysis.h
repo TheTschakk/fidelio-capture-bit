@@ -13,7 +13,7 @@ int analyseMeteors(struct image *img) {
     for (i=0; i<(img->num); i++) {
         getPosition(img->met[i]);
         assignContinuity(img, img->met[i], 20, depth);
-        getVelocity(img->met[i]);
+        getVelocity(img->met[i]); // only evluate if found=1 and write_video?
     }
 
     return 0;

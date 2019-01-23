@@ -72,3 +72,14 @@ void getPosition(struct meteor *met) {
     met->posY = meanY/N;
     met->posVar = (meanX2/N - meanX*meanX/(N*N)) * (meanY2/N - meanY*meanY/(N*N));
 }
+
+struct image *revertFrames(struct image *frm, int N) {
+	int i;
+
+	for(i=0; i<N; i++) {
+		frm = frm->prev;
+	}
+
+	return frm;
+}
+

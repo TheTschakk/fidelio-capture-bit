@@ -38,6 +38,7 @@ static struct image *frm = NULL;
 
 void switchEle(int *list, int item1, int item2);
 void print1dArray(int *list, int dim);
+struct image *revertFrames(struct image *frm, int N);
 
 #include "met.h"
 #include "bits.h"
@@ -76,21 +77,21 @@ int mainloop (time_t exectime) {
         if ( (frm->index % adj_rate) == 0 )
             adjustSensitivity(frm, 10, 0);
 
-        if ( endOfMeteor(frm, &lifetime, 3) != -1 ) { // SHOULD BE "DEPTH" NOT "3" XYXYXYXY CHANGE CHANGE DEFCON 3.141
-            printData(frm->prev->prev->prev); // CHANGE TO prev->prev DEFCON 2.71
-            found = lifetime;
+        if ( endOfMeteor(frm, depth) && !found ) {
+	    //printData(revertFrames(frm, depth));
+	    lifetime = endOfMeteor(frm, depth);
+            found = 1;
         }
 
-        if (found > 0)
+        if (found)
             n++;
-        else
-            n = 0;
 
         if (n > postfluff) {
             printf("saving video\n");
-            write_video(frm, (prefluff + found + postfluff));
+            write_video(frm, lifetime);
             n = 0;
             found = 0;
+	    lifetime = 0;
         }
 
         //printf("num %i\n", (frm->Nlght + frm->Nshdw));

@@ -59,7 +59,7 @@ int mainloop(void) {
 
         //clock_gettime(CLOCK_REALTIME, &systime); printf("analyse Frame %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);
 
-        if ( endOfMeteor(frm, &lifetime, depth) != -1 ) {
+        if ( endOfMeteor(frm, depth) != -1 ) {
             found = lifetime;
             printData(frm->prev->prev);
             exit(0);
@@ -94,6 +94,7 @@ int mainloop(void) {
 
 int main(int argc,char* argv[]){
     input = argv[1];
+    buffer_size = argv[2];
     frm = buildBuffer(buffer_size); // generate cyclicalc buffer of size "buffer_size" frames
     read_video(input, frm); // invoke the read_video() function in order to fill generated buffer with frames from "input"
 
