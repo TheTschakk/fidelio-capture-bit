@@ -22,7 +22,7 @@
 #define MAXMET 100
 
 int delta = 100;
-int adj_rate = 150;
+int adj_rate = 10;
 int cutoff = 10;
 int depth = 2;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
@@ -74,7 +74,7 @@ int mainloop (time_t exectime) {
         if (found == 0)
             analyseFrame(frm);
 
-        if ( (frm->index % adj_rate) == 0 )
+        if ( ((frm->index % adj_rate) == 0) && !found )
             adjustSensitivity(frm, 10, 0);
 
         if ( endOfMeteor(frm, depth) && !found ) {

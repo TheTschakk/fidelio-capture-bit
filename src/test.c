@@ -14,7 +14,7 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int delta = 100;
+int delta = 60;
 int adj_rate = 150;
 int cutoff = 10;
 int depth = 2;
@@ -23,8 +23,8 @@ int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom ma
 static char *input;
 char cam_id = '0';
 const int buffer_size = 150;
-static int prefluff = 25;
-static int postfluff = 25;
+static int prefluff = 10;
+static int postfluff = 10;
 
 void switchEle(int *list, int item1, int item2);
 void print1dArray(int *list, int dim);
@@ -48,13 +48,15 @@ int mainloop(void) {
     int lifetime;
 
     while (1) {
-        //printf("frame %i ################################################\n", frm->index);
+        printf("\nframe %i\n", frm->index);
 
         if (found == 0)
             analyseFrame(frm);
 
-        if ( (frm->index % adj_rate) == 0 )
+        if ( ((frm->index % adj_rate) == 0) && !found )
             adjustSensitivity(frm, 10, 0);
+
+        printf("!!! END OF METEOR !!! ###################################### : %i\n", endOfMeteor(frm, depth));
 
         if ( endOfMeteor(frm, depth) && !found ) {
 	    lifetime = endOfMeteor(frm, depth);
@@ -65,8 +67,8 @@ int mainloop(void) {
             n++;
 
         if (n > postfluff) {
-            printf("saving video, lifetime = %i\n", lifetime);
-            //write_video(frm, lifetime);
+            printf("saving video ------------------------------- lifetime = %i\n", lifetime);
+            write_video(frm, lifetime);
             n = 0;
             found = 0;
 	    lifetime = 0;
@@ -74,6 +76,9 @@ int mainloop(void) {
 
         printImage(frm);
         frm = frm->next;
+        if(frm->index == -1) {
+            return 0;
+        }
     }
 
     return 0;

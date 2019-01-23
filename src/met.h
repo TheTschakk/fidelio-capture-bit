@@ -237,7 +237,8 @@ int endOfMeteor(struct image *img, int depth) {
     if ( num == -1 )
         return 0;
 
-    if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) || ( ref->met[num]->v2 < 1 ) )
+    //if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) || ( ref->met[num]->v2 < 1 ) )
+    if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) )
         return 0;
 
     return dur;
