@@ -21,10 +21,10 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int delta = 100;
-int adj_rate = 10;
-int cutoff = 10;
-int depth = 2;
+int delta = 100; // inititial value of pixel value delta
+int adj_rate = 10; // sensitivity adjustment interval in frames
+int cutoff = 10; // distance cutoff for clustering
+int depth = 2; // frame depth for continuity search
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0";
@@ -78,9 +78,9 @@ int mainloop (time_t exectime) {
             adjustSensitivity(frm, 10, 0);
 
         if ( endOfMeteor(frm, depth) && !found ) {
-	    //printData(revertFrames(frm, depth));
 	    lifetime = endOfMeteor(frm, depth);
             found = 1;
+            printf("lifetime = %i\n", lifetime);
         }
 
         if (found)

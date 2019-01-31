@@ -164,12 +164,12 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
                 met->prev = img->met[j];
                 if (img->met[j]->next == NULL) img->met[j]->next = met;
                 met->continuity = deg;
-                break;
+                break; // breaks inner for-loop
             }
         }
         if (met->continuity > 0) {
             met->duration = img->met[j]->duration + met->continuity;
-            break;
+            break; // breaks outer for-loop
         }
     }
 }
@@ -218,7 +218,7 @@ void getVelocity(struct meteor *met0) {
     met0->direction = atan2(vx, vy);
 }
 
-int endOfMeteor(struct image *img, int depth) {
+int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors and returns duration of longest meteor
     int i;
     int num=-1;
     int dur=0;
@@ -228,7 +228,8 @@ int endOfMeteor(struct image *img, int depth) {
     ref = revertFrames(ref, depth);
 
     for (i=0; i<(ref->num); i++) {
-        if ( (ref->met[i]->next == NULL) && (ref->met[i]->prev != NULL) && (ref->met[i]->duration > dur) ) {
+        //if ( (ref->met[i]->next == NULL) && (ref->met[i]->prev != NULL) && (ref->met[i]->duration > dur) ) {
+        if ( (ref->met[i]->next == NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
             dur = ref->met[num]->duration;
         }
@@ -241,6 +242,7 @@ int endOfMeteor(struct image *img, int depth) {
     if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) )
         return 0;
 
+    printf("dur/v2/R = %i / %f / %f\n", dur, ref->met[num]->v2, ref->met[num]->R);
     return dur;
 }
 
