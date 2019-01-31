@@ -10,9 +10,8 @@ gcc -o main src/main.c -O3 -g -lm -Wall
 
 ### set up crontab ###
 
-cat <(echo "@reboot source $METHOME/misc/metconf") \
-	<(echo "@reboot $METHOME/bash/screen.sh") \
-	<(echo "00 12 * * * $METHOME/bash/startup.sh") \
+cat <(echo "@reboot $METHOME/bash/screen.sh") \
+	<(echo "00 12 * * * $$METHOME/misc/metconf; METHOME/bash/startup.sh") \
 	> "$METHOME/misc/cronfile"
 
 crontab -u $USER "$METHOME/misc/cronfile"
