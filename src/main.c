@@ -35,6 +35,7 @@ static int postfluff = 25;
 
 static int fd = -1;
 static struct image *frm = NULL;
+static int* sensmat = NULL;
 
 void switchEle(int *list, int item1, int item2);
 void print1dArray(int *list, int dim);
@@ -75,7 +76,7 @@ int mainloop (time_t exectime) {
             analyseFrame(frm);
 
         if ( ((frm->index % adj_rate) == 0) && !found )
-            adjustSensitivity(frm, 10, 0);
+            adjustSensitivity1(frm, 10, 0);
 
         if ( endOfMeteor(frm, depth) && !found ) {
 	    lifetime = endOfMeteor(frm, depth);
@@ -133,6 +134,8 @@ int main(int argc, char* argv[]) {
     if (start_grabbing())
         return 1;
 
+    initSensmat(delta);
+
     mainloop(time);
 
     stop_grabbing();
@@ -142,6 +145,8 @@ int main(int argc, char* argv[]) {
     close(fd);
 
     freeBuffer(frm);
+
+    free(sensmat);
 
     return 0;
 }
