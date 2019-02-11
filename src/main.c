@@ -75,8 +75,10 @@ int mainloop (time_t exectime) {
         if (found == 0)
             analyseFrame(frm);
 
+        /*
         if ( ((frm->index % adj_rate) == 0) && !found )
             adjustSensitivity1(frm, buffer_size, 0);
+        */
 
         if ( endOfMeteor(frm, depth) && !found ) {
 	    lifetime = endOfMeteor(frm, depth);

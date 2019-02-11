@@ -9,7 +9,7 @@ int getY(int index) {
     return index / WIDTH;
 }
 
-int inFrame(int index) {
+int inFrame(int index) { // returns 1 if pixel index is in-frame
     int x = getX(index);
     int y = getY(index);
 
@@ -65,6 +65,44 @@ int identifyPix1(struct image *img) {
     return 0;
 }
 
+int threshold = 10;
+int rate = 100;
+
+int identifyPix2(struct image *img) {
+    int i;
+    int absdiff;
+
+    for (i=0; i<LENGTH; i++) {
+
+        if ( !inFrame(i) )
+            continue;
+
+	absdiff = abs(img->data[i] - img->prev->data[i]);
+
+        if ( (absdiff*rate) > sensmat[i] )
+            sensmat[i]++;
+        else
+            sensmat[i]--;
+
+        if ( absdiff > ( sensmat[i]/rate + threshold ) ) {
+
+            if ( (img->data[i] - img->prev->data[i]) > 0 ) {
+                img->lght[img->Nlght] = i;
+                if ( ++img->Nlght >= MAXPIX ) return -1;
+            }else{
+                img->shdw[img->Nshdw] = i;
+                if ( ++img->Nshdw >= MAXPIX ) return -1;
+            }
+        }
+
+        printf("%i ", sensmat[337413]);
+    }
+
+    if ( !(img->Nlght && img->Nshdw) ) return 1;
+
+    return 0;
+}
+
 int squareDist(int i1, int i2) {
     return (getX(i1)-getX(i2)) * (getX(i1)-getX(i2)) + (getY(i1)-getY(i2)) * (getY(i1)-getY(i2));
 }
@@ -75,19 +113,19 @@ void getPosition(struct meteor *met) {
     float meanX2=0, meanY2=0;
 
     int N = met->Nlght + met->Nshdw;
-    
+
     for (i=0; i<(met->Nlght); i++) {
-	meanX += (float) getX(met->lght[i]);
-	meanX2 += (float) getX(met->lght[i]) * getX(met->lght[i]);
-	meanY += (float) getY(met->lght[i]);
-	meanY2 += (float) getY(met->lght[i]) * getY(met->lght[i]);
+        meanX += (float) getX(met->lght[i]);
+        meanX2 += (float) getX(met->lght[i]) * getX(met->lght[i]);
+        meanY += (float) getY(met->lght[i]);
+        meanY2 += (float) getY(met->lght[i]) * getY(met->lght[i]);
     }
 
     for (i=0; i<(met->Nshdw); i++) {
-	meanX += (float) getX(met->shdw[i]);
-	meanX2 += (float) getX(met->shdw[i]) * getX(met->shdw[i]);
-	meanY += (float) getY(met->shdw[i]);
-	meanY2 += (float) getY(met->shdw[i]) * getY(met->shdw[i]);
+        meanX += (float) getX(met->shdw[i]);
+        meanX2 += (float) getX(met->shdw[i]) * getX(met->shdw[i]);
+        meanY += (float) getY(met->shdw[i]);
+        meanY2 += (float) getY(met->shdw[i]) * getY(met->shdw[i]);
     }
 
     met->posX = meanX/N;
@@ -96,12 +134,12 @@ void getPosition(struct meteor *met) {
 }
 
 struct image *revertFrames(struct image *frm, int N) {
-	int i;
+    int i;
 
-	for(i=0; i<N; i++) {
-		frm = frm->prev;
-	}
+    for(i=0; i<N; i++) {
+        frm = frm->prev;
+    }
 
-	return frm;
+    return frm;
 }
 
