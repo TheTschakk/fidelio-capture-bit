@@ -31,6 +31,7 @@ void adjustSensitivity1(struct image *img, int nframes, int threshold) {
 
         for (j=0; j<(img->Nlght); j++) {
             pixmat[img->lght[j]]++;
+	    printf("val: %i sens: %i\n",img->lght[j], sensmat[img->lght[j]]);
         }
 
         for (j=0; j<(img->Nshdw); j++) {
@@ -40,15 +41,27 @@ void adjustSensitivity1(struct image *img, int nframes, int threshold) {
         img = img->prev;
     }
 
-    threshold = threshold*nframes; // to avoid int-float conversion later on
+    //threshold = threshold*nframes; // to avoid int-float conversion later on
 
     for (i=0; i<LENGTH; i++) {
 
-        if ( pixmat[i] > threshold )
+        if ( pixmat[i] > threshold ) {
+		//printf("foo!!!!!!!!!!!!!!!!!!!!!!!!");
             sensmat[i]++;
+	}
         else
             sensmat[i]--;
     }
+
+    printf("sensmat: ");
+    /*
+    for (i=0; i<LENGTH; i++) {
+	    printf("%i ", sensmat[i]);
+    }
+    */
+    printf("%i ", sensmat[337413]);
+    printf(" %i ", pixmat[337413]);
+    printf("\n");
 
     free(pixmat);
 }
