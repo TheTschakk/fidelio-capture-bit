@@ -21,17 +21,18 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int delta = 100; // inititial value of pixel value delta
+int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
+int delta = 10; // inititial value of pixel value delta
 int adj_rate = 10; // sensitivity adjustment interval in frames
 int cutoff = 10; // distance cutoff for clustering
 int depth = 2; // frame depth for continuity search
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
-char *dev_name = "/dev/video0";
-char cam_id = '0';
-const int buffer_size = 600;
-static int prefluff = 25;
-static int postfluff = 25;
+char *dev_name = "/dev/video0"; // camera video device path
+char cam_id = '0'; // id number of camera in the network (one of '0', '1', '2', ...)
+const int buffer_size = 600; // size of the frame buffer in number of frames
+static int prefluff = 25; // number of frames to save before an event
+static int postfluff = 25; // number of frames to save after an event
 
 static int fd = -1;
 static struct image *frm = NULL;
@@ -59,12 +60,14 @@ int mainloop (time_t exectime) {
     time_t start = time(NULL);
     time_t end = start + exectime;
 
-	printf("filling buffer\n");
-	
-	for (i=0; i<buffer_size; i++) {
-		wait_for_frame();
-		frm = frm->next;
-	}
+    printf("filling buffer\n");
+
+    for (i=0; i<buffer_size; i++) {
+        delta *= rate;
+        wait_for_frame();
+        frm = frm->next;
+        identifyPix2(frm);
+    }
 
     while (time(NULL) < end) {
         //printf("frame %i ################################################\n", frm->index);
@@ -76,12 +79,12 @@ int mainloop (time_t exectime) {
             analyseFrame(frm);
 
         /*
-        if ( ((frm->index % adj_rate) == 0) && !found )
-            adjustSensitivity1(frm, buffer_size, 0);
-        */
+           if ( ((frm->index % adj_rate) == 0) && !found )
+           adjustSensitivity1(frm, buffer_size, 0);
+           */
 
         if ( endOfMeteor(frm, depth) && !found ) {
-	    lifetime = endOfMeteor(frm, depth);
+            lifetime = endOfMeteor(frm, depth);
             found = 1;
             printf("lifetime = %i\n", lifetime);
         }
@@ -94,7 +97,7 @@ int mainloop (time_t exectime) {
             write_video(frm, lifetime);
             n = 0;
             found = 0;
-	    lifetime = 0;
+            lifetime = 0;
         }
 
         //printf("num %i\n", (frm->Nlght + frm->Nshdw));
@@ -113,7 +116,7 @@ int main(int argc, char* argv[]) {
 
     sscanf(argv[1], "%i", &time_int);
     time = time_int;
-    
+
     if ( argc > 2 )
         dev_name = argv[2];
 
@@ -136,7 +139,8 @@ int main(int argc, char* argv[]) {
     if (start_grabbing())
         return 1;
 
-    initSensmat(delta);
+    initSensmat(delta*rate);
+    printf("foo %i\n", sensmat[0]);
 
     mainloop(time);
 

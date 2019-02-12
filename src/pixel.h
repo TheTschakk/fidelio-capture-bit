@@ -65,9 +65,6 @@ int identifyPix1(struct image *img) {
     return 0;
 }
 
-int threshold = 10;
-int rate = 100;
-
 int identifyPix2(struct image *img) {
     int i;
     int absdiff;
@@ -84,7 +81,7 @@ int identifyPix2(struct image *img) {
         else
             sensmat[i]--;
 
-        if ( absdiff > ( sensmat[i]/rate + threshold ) ) {
+        if ( absdiff > ( sensmat[i]/rate + delta ) ) {
 
             if ( (img->data[i] - img->prev->data[i]) > 0 ) {
                 img->lght[img->Nlght] = i;
@@ -95,8 +92,9 @@ int identifyPix2(struct image *img) {
             }
         }
 
-        printf("%i ", sensmat[337413]);
     }
+
+    printf("sens:%i diff:%i\n", sensmat[337413], img->data[337413] - img->prev->data[337413]);
 
     if ( !(img->Nlght && img->Nshdw) ) return 1;
 
