@@ -69,6 +69,7 @@ int identifyPix2(struct image *img) {
     int i;
     int absdiff;
 
+    //printf("sens:%i diff:%i, %d, %d, %i, %i\n", sensmat[337413], (int) (img->data[337413] - img->prev->data[337413]), img->data[337413], img->prev->data[337413], sensmat[337413]/rate + delta, delta);
     for (i=0; i<LENGTH; i++) {
 
         if ( !inFrame(i) )
@@ -94,7 +95,6 @@ int identifyPix2(struct image *img) {
 
     }
 
-    printf("sens:%i diff:%i\n", sensmat[337413], img->data[337413] - img->prev->data[337413]);
 
     if ( !(img->Nlght && img->Nshdw) ) return 1;
 

@@ -9,7 +9,7 @@ void adjustSensitivity0(struct image *img, int nframes, int threshold) {
 	}
 	printf("Sensitivity ");
 
-	if ( (N/nframes) > threshold ) {
+	if ( N > (threshold*nframes) ) {
 		delta++;
 	} else {
 		delta--;

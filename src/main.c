@@ -22,8 +22,8 @@
 #define MAXMET 100
 
 int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
-int delta = 10; // inititial value of pixel value delta
-int adj_rate = 10; // sensitivity adjustment interval in frames
+int delta = 50; // inititial value of pixel value delta
+int adj_rate = 100; // sensitivity adjustment interval in frames
 int cutoff = 10; // distance cutoff for clustering
 int depth = 2; // frame depth for continuity search
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
@@ -60,13 +60,12 @@ int mainloop (time_t exectime) {
     time_t start = time(NULL);
     time_t end = start + exectime;
 
-    printf("filling buffer\n");
-
     for (i=0; i<buffer_size; i++) {
-        delta *= rate;
+	printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
         wait_for_frame();
+        identifyPix2(frm); // need to do something, otherwise same frame will be fetched all over again
         frm = frm->next;
-        identifyPix2(frm);
+	initFrame(frm);
     }
 
     while (time(NULL) < end) {
@@ -78,10 +77,8 @@ int mainloop (time_t exectime) {
         if (found == 0)
             analyseFrame(frm);
 
-        /*
-           if ( ((frm->index % adj_rate) == 0) && !found )
-           adjustSensitivity1(frm, buffer_size, 0);
-           */
+	if ( ((frm->index % adj_rate) == 0) && !found )
+           adjustSensitivity0(frm, adj_rate, 10);
 
         if ( endOfMeteor(frm, depth) && !found ) {
             lifetime = endOfMeteor(frm, depth);
@@ -139,8 +136,7 @@ int main(int argc, char* argv[]) {
     if (start_grabbing())
         return 1;
 
-    initSensmat(delta*rate);
-    printf("foo %i\n", sensmat[0]);
+    initSensmat(rate);
 
     mainloop(time);
 
