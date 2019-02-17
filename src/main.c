@@ -29,7 +29,7 @@ int depth = 2; // frame depth for continuity search
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0"; // camera video device path
-char cam_id = '0'; // id number of camera in the network (one of '0', '1', '2', ...)
+char cam_id = '?'; // id number of camera in the network (one of '0', '1', '2', ...)
 const int buffer_size = 600; // size of the frame buffer in number of frames
 static int prefluff = 25; // number of frames to save before an event
 static int postfluff = 25; // number of frames to save after an event
@@ -78,7 +78,7 @@ int mainloop (time_t exectime) {
             analyseFrame(frm);
 
 	if ( ((frm->index % adj_rate) == 0) && !found )
-           adjustSensitivity0(frm, adj_rate, 10);
+           adjustSensitivity0(frm, adj_rate, 1);
 
         if ( endOfMeteor(frm, depth) && !found ) {
             lifetime = endOfMeteor(frm, depth);
@@ -115,10 +115,14 @@ int main(int argc, char* argv[]) {
     time = time_int;
 
     if ( argc > 2 )
-        dev_name = argv[2];
+	    dev_name = argv[2];
+    else
+	    dev_name = getenv("METDEV");
+
+    cam_id = getenv("CAMID")[0];
 
     frm = buildBuffer(buffer_size);
-    printf("%s!\n", dev_name);
+    printf("camera -%c- using %s!\n", cam_id, dev_name);
 
     fd = open(dev_name, O_RDWR | O_NONBLOCK, 0);
 

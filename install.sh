@@ -1,8 +1,10 @@
 #!/bin/bash
 
-source ./misc/metconf
+### first set up "metconf" then run this script (follow instructions given in "config/metconf"!
 
-## compile C code ###
+source "$HOME/metconf"
+
+### compile C code ###
 
 #gcc -o test src/test.c -O3 -g -lm -Wall
 gcc -o main src/main.c -O3 -g -lm -Wall
@@ -11,15 +13,15 @@ gcc -o main src/main.c -O3 -g -lm -Wall
 ### set up crontab ###
 
 cat <(echo "@reboot $METHOME/bash/screen.sh") \
-	<(echo "00 12 * * * $$METHOME/misc/metconf; METHOME/bash/startup.sh") \
-	> "$METHOME/misc/cronfile"
+	<(echo "00 12 * * * $HOME/metconf; $METHOME/bash/startup.sh") \
+	> "$METHOME/config/cronfile"
 
-crontab -u $USER "$METHOME/misc/cronfile"
+crontab -u $USER "$METHOME/config/cronfile"
 
 
-### set up environment
+### set up environment ###
 
-CONF="source $METHOME/misc/metconf"
+CONF="source $HOME/metconf"
 grep -qF -- "$CONF" "$HOME/.bashrc" || echo "$CONF" >> "$HOME/.bashrc"
 
 touch "$HOME/.tmux.conf"

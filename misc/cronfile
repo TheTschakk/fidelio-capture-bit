@@ -1,2 +1,0 @@
-@reboot /home/pi/fidelio-capture-bit/bash/screen.sh
-00 12 * * * 7707METHOME/misc/metconf; METHOME/bash/startup.sh

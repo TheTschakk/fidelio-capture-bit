@@ -12,8 +12,8 @@ import os
 
 observer = ephem.Observer()
 
-observer.lat = '49.869802'
-observer.lon = '8.778283'
+observer.lat = os.environ["CAMLAT"] # '49.869802'
+observer.lon = os.environ["CAMLON"] # '8.778283'
 dev = os.environ["METDEV"] # "/dev/video0"
 exe = os.environ["METHOME"] + "/bash/run.sh" # "/home/pi/fidelio-capture-bit/run.sh"
 
@@ -48,6 +48,6 @@ else:
 print("scheduled night length: " + str(night) + " sec")
 
 GPIO.output(11, GPIO.HIGH)
-subprocess.call([exe, str(night), dev])
+subprocess.call([exe, str(night)])
 GPIO.output(11, GPIO.LOW)
 GPIO.cleanup()

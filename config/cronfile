@@ -1,0 +1,2 @@
+@reboot /home/pi/fidelio-capture-bit/bash/screen.sh
+00 12 * * * /home/pi/metconf; /home/pi/fidelio-capture-bit/bash/startup.sh
