@@ -10,5 +10,5 @@ export METDEV="/dev/video0" # video device of camera module
 export CAMID='0' # camera id (single char: '0'-'9', 'a'-'z' or 'A'-'Z')
 
 # camera longitude/latitude (decimal number)
-export CAMLONG="49.869802"
-export CAMLAT="8.778283"
+export CAMLAT="49.869802"
+export CAMLON="8.778283"

@@ -2,11 +2,12 @@
 
 import numpy as np
 import sys
+import os
 
 #read data and arrange trainingdata
-with open('trainingsdaten/meteor2.dat') as file1:
+with open(os.environ["METHOME"] + '/python/trainingsdaten/meteor2.dat') as file1:
     meteore = file1.read()
-    with open('trainingsdaten/plane2.dat') as file2:
+    with open(os.environ["METHOME"] + '/python/trainingsdaten/plane2.dat') as file2:
         planes = file2.read()
         data = meteore + planes
         lines = data.split('\n')

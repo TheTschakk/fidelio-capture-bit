@@ -160,7 +160,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
         img = img->prev;
         for (j=0; j<(img->num); j++) {
             if ( ((met->posX - img->met[j]->posX) * (met->posX - img->met[j]->posX) +
-                        (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg*deg * dist*dist) ) {
+                        (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
                 met->prev = img->met[j];
                 if (img->met[j]->next == NULL) img->met[j]->next = met;
                 met->continuity = deg;
@@ -228,7 +228,6 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
     ref = revertFrames(ref, depth);
 
     for (i=0; i<(ref->num); i++) {
-        //if ( (ref->met[i]->next == NULL) && (ref->met[i]->prev != NULL) && (ref->met[i]->duration > dur) ) {
         if ( (ref->met[i]->next == NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
             dur = ref->met[num]->duration;

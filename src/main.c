@@ -22,10 +22,10 @@
 #define MAXMET 100
 
 int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
-int delta = 50; // inititial value of pixel value delta
+int delta = 70; // inititial value of pixel value delta
 int adj_rate = 100; // sensitivity adjustment interval in frames
 int cutoff = 10; // distance cutoff for clustering
-int depth = 2; // frame depth for continuity search
+int depth = 10; // frame depth for continuity search
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0"; // camera video device path
