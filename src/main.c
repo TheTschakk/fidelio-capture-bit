@@ -21,12 +21,12 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
-int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
+const int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
 int delta = 70; // inititial value of pixel value delta
-int adj_rate = 100; // sensitivity adjustment interval in frames
-int cutoff = 10; // distance cutoff for clustering
-int depth = 10; // frame depth for continuity search
-int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
+const int adj_rate = 100; // sensitivity adjustment interval in frames
+const int cutoff = 10; // distance cutoff for clustering
+const int depth = 10; // frame depth for continuity search
+const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0"; // camera video device path
 char cam_id = '?'; // id number of camera in the network (one of '0', '1', '2', ...)
@@ -63,7 +63,7 @@ int mainloop (time_t exectime) {
     for (i=0; i<buffer_size; i++) {
 	printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
         wait_for_frame();
-        identifyPix2(frm); // need to do something, otherwise same frame will be fetched all over again
+        identifyPix(frm); // need to do something, otherwise same frame will be fetched all over again
         frm = frm->next;
 	initFrame(frm);
     }

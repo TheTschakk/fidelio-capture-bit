@@ -4,8 +4,8 @@ unsigned int blockL;
 unsigned int blockS;
 
 extern int delta;
-extern int cutoff;
-extern int depth;
+extern const int cutoff;
+extern const int depth;
 
 int analyseMeteors(struct image *img) {
     int i;
@@ -26,7 +26,7 @@ int analyseFrame(struct image *img) {
 
     initFrame(img);
 
-    if ( identifyPix2(img) ) return 1; // build lists of bright (>0) and dark (<0) pixels from sub
+    if ( identifyPix(img) ) return 1; // build lists of bright (>0) and dark (<0) pixels from sub
     //printf("nl %i ns %i\n", img->Nlght, img->Nshdw);
 
     //clock_gettime(CLOCK_REALTIME, &systime); printf("identifyPix %f sec\n", (float) ((systime.tv_nsec - reftime.tv_nsec)/1000) / 1000000);

@@ -1,5 +1,5 @@
 
-extern int margins[];
+extern const int margins[];
 
 int getX(int index) {
     return index % WIDTH;
@@ -19,57 +19,10 @@ int inFrame(int index) { // returns 1 if pixel index is in-frame
     return 0;
 }
 
-int identifyPix0(struct image *img, int lim) {
-    int i;
-    int diff;
-
-    for (i=0; i<LENGTH; i++) {
-	diff = img->data[i] - img->prev->data[i];
-
-	if ( (diff > lim) && inFrame(i) ) {
-	    img->lght[img->Nlght] = i;
-            if ( ++img->Nlght >= MAXPIX ) return -1;
-	    //img->Nlght++;
-	}
-	else if ( (diff < -lim) && inFrame(i) ) {
-	    img->shdw[img->Nshdw] = i;
-            if ( ++img->Nshdw >= MAXPIX ) return -1;
-	    //img->Nshdw++;
-	}
-    }
-
-    if ( !(img->Nlght && img->Nshdw) ) return 1;
-
-    return 0;
-}
-
-int identifyPix1(struct image *img) {
-    int i;
-    int diff;
-
-    for (i=0; i<LENGTH; i++) {
-	diff = img->data[i] - img->prev->data[i];
-
-	if ( (diff > sensmat[i]) && inFrame(i) ) {
-	    img->lght[img->Nlght] = i;
-            if ( ++img->Nlght >= MAXPIX ) return -1;
-	}
-	else if ( (diff < -sensmat[i]) && inFrame(i) ) {
-	    img->shdw[img->Nshdw] = i;
-            if ( ++img->Nshdw >= MAXPIX ) return -1;
-	}
-    }
-
-    if ( !(img->Nlght && img->Nshdw) ) return 1;
-
-    return 0;
-}
-
-int identifyPix2(struct image *img) {
+int identifyPix(struct image *img) {
     int i;
     int absdiff;
 
-    //printf("sens:%i diff:%i, %d, %d, %i, %i\n", sensmat[337413], (int) (img->data[337413] - img->prev->data[337413]), img->data[337413], img->prev->data[337413], sensmat[337413]/rate + delta, delta);
     for (i=0; i<LENGTH; i++) {
 
         if ( !inFrame(i) )
@@ -94,7 +47,6 @@ int identifyPix2(struct image *img) {
         }
 
     }
-
 
     if ( !(img->Nlght && img->Nshdw) ) return 1;
 
