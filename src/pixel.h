@@ -22,6 +22,7 @@ int inFrame(int index) { // returns 1 if pixel index is in-frame
 int identifyPix(struct image *img) {
     int i;
     int absdiff;
+    int mean=0;
 
     for (i=0; i<LENGTH; i++) {
 
@@ -29,6 +30,7 @@ int identifyPix(struct image *img) {
             continue;
 
 	absdiff = abs(img->data[i] - img->prev->data[i]);
+        mean += img->data[i];
 
         if ( (absdiff*rate) > sensmat[i] )
             sensmat[i]++;
@@ -47,6 +49,8 @@ int identifyPix(struct image *img) {
         }
 
     }
+
+    if ( mean > (LENGTH * brightness) ) return 1;
 
     if ( !(img->Nlght && img->Nshdw) ) return 1;
 

@@ -14,10 +14,12 @@
 #define SIZE (MAXPIX/INT)
 #define MAXMET 100
 
+int rate = 100;
 int delta = 60;
 int adj_rate = 150;
 int cutoff = 10;
 int depth = 2;
+const int brightness = 200;
 int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 static char *input;

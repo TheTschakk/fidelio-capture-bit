@@ -26,7 +26,8 @@ int delta = 70; // inititial value of pixel value delta
 const int adj_rate = 100; // sensitivity adjustment interval in frames
 const int cutoff = 10; // distance cutoff for clustering
 const int depth = 10; // frame depth for continuity search
-const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
+const int brightness = 200; // maximum allowed mean brightness (images with to bright background won't be processed)
+const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; // left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0"; // camera video device path
 char cam_id = '?'; // id number of camera in the network (one of '0', '1', '2', ...)
