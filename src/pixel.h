@@ -50,7 +50,10 @@ int identifyPix(struct image *img) {
 
     }
 
-    if ( mean > (LENGTH * brightness) ) return 1;
+    if ( mean > (LENGTH * brightness) ) {
+	    printf("Maximal brightness of %i/%i exceeded\n", (mean/LENGTH), brightness);
+	    return 1;
+    }
 
     if ( !(img->Nlght && img->Nshdw) ) return 1;
 
