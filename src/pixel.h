@@ -22,7 +22,7 @@ int inFrame(int index) { // returns 1 if pixel index is in-frame
 int identifyPix(struct image *img) {
     int i;
     int absdiff;
-    int mean=0;
+    long int mean=0;
 
     for (i=0; i<LENGTH; i++) {
 
@@ -50,8 +50,10 @@ int identifyPix(struct image *img) {
 
     }
 
-    if ( mean > (LENGTH * brightness) ) {
-	    printf("Maximal brightness of %i/%i exceeded\n", (mean/LENGTH), brightness);
+    mean /= LENGTH;
+
+    if ( mean > brightness ) {
+	    printf("Maximal brightness of %ld/%i exceeded\n", mean, brightness);
 	    return 1;
     }
 
