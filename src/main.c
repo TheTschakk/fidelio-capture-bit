@@ -25,13 +25,13 @@ const int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate"
 int delta = 70; // inititial value of pixel value delta
 const int adj_rate = 100; // sensitivity adjustment interval in frames
 const int cutoff = 10; // distance cutoff for clustering
-const int depth = 10; // frame depth for continuity search
-const int brightness = 200; // maximum allowed mean brightness (images with to bright background won't be processed)
+const int depth = 20; // frame depth for continuity search
+const int brightness = 150; // maximum allowed mean brightness (images with to bright background won't be processed)
 const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; // left, right, top and bottom margine (currently all 10 px)
 
 char *dev_name = "/dev/video0"; // camera video device path
 char cam_id = '?'; // id number of camera in the network (one of '0', '1', '2', ...)
-const int buffer_size = 600; // size of the frame buffer in number of frames
+const int buffer_size = 700; // size of the frame buffer in number of frames
 static int prefluff = 25; // number of frames to save before an event
 static int postfluff = 25; // number of frames to save after an event
 

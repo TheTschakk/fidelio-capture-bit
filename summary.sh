@@ -8,7 +8,9 @@ for VID in $@; do
 
     echo $FILE
 
-    ffmpeg -r 1 -f rawvideo -pix_fmt gray -s 720x480 -i ${FILE}.bwv -r 1 -c:v pam -f image2pipe pipe:1 | convert - -evaluate-sequence max ${FILE}.png
+    ffmpeg -r 1 -f rawvideo -pix_fmt gray -s 720x480 -i ${FILE}.bwv -r 1 -c:v pam -f image2pipe pipe:1 |
+    convert - -evaluate-sequence max \
+	   -background "white" label:"${FILE%.*}" -gravity center -append ${FILE}.png
 done
 
 #NUM=$(ls -1 *png | wc -l)
