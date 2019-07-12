@@ -213,7 +213,8 @@ void getVelocity(struct meteor *met0) {
     met0->vx = vx;
     met0->vy = vy;
     met0->v2 = vx*vx + vy*vy;
-    met0->R = Rx*Ry;
+    //met0->R = Rx*Ry;
+    met0->R = vx/(vx+vy) * Rx + vy/(vx+vy) * Ry;
 
     met0->direction = atan2(vx, vy);
 }
