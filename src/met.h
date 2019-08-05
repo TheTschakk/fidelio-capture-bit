@@ -226,9 +226,13 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
 
     struct image *ref = img;
 
+    printf(Starting from Img %i\n, ref->index);
     ref = revertFrames(ref, depth);
+    printf(Going to Img %i\n, ref->index);
 
     for (i=0; i<(ref->num); i++) {
+
+        printf(METEOR --%i-- | NEXT --%p-- | PREV --%p--\n, i, ref->met[i]->next, ref->met[i]->prev);
 
         if ( (ref->met[i]->next == NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
