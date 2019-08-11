@@ -160,7 +160,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
         img = img->prev;
         for (j=0; j<(img->num); j++) {
             if ( ((met->posX - img->met[j]->posX) * (met->posX - img->met[j]->posX) +
-                        (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
+                  (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
                 met->prev = img->met[j];
                 if (img->met[j]->next == NULL) img->met[j]->next = met;
                 met->continuity = deg;
@@ -172,6 +172,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
             break; // breaks outer for-loop
         }
     }
+    printf("prev --%p-- / next --%p--\n", met->prev, met->next);
 }
 
 void getVelocity(struct meteor *met0) {
@@ -226,13 +227,13 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
 
     struct image *ref = img;
 
-    printf(Starting from Img %i\n, ref->index);
+    //printf("Starting from Img %i\n", ref->index);
     ref = revertFrames(ref, depth);
-    printf(Going to Img %i\n, ref->index);
+    //rintf("Going to Img %i\n", ref->index);
 
     for (i=0; i<(ref->num); i++) {
 
-        printf(METEOR --%i-- | NEXT --%p-- | PREV --%p--\n, i, ref->met[i]->next, ref->met[i]->prev);
+        //printf("METEOR --%i-- | NEXT --%p-- | PREV --%p--\n", i, ref->met[i]->next, ref->met[i]->prev);
 
         if ( (ref->met[i]->next == NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
@@ -243,11 +244,12 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
         struct meteor *fin = ref->met[i];
 
         while (fin->next != NULL) {
+		printf("finptr %p --> %p\n", fin, fin->next);
             fin = fin->next;
         }
 
         if ( fin->duration > dur ) {
-            dur = ref->met[num]->duration;
+            dur = fin->duration;
             num = -1;
         }
     }
