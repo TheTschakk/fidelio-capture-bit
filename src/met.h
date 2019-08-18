@@ -283,3 +283,14 @@ void printImage(struct image *img) {
     }
 }
 
+int getLongest(struct image *img) {
+	int i;
+	int duration=0;
+
+	for (i=0; i<(img->num); i++) {
+		if (img->met[i]->duration > duration)
+			duration = img->met[i]->duration;
+	}
+
+	return duration;
+}
