@@ -17,16 +17,18 @@
 int rate = 100;
 int delta = 60;
 int adj_rate = 150;
-int cutoff = 10;
-int depth = 2;
+const int cutoff = 10;
+const int depth = 10;
 const int brightness = 200;
-int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
+const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; //left, right, top and bottom margine (currently all 10 px)
 
 static char *input;
 char cam_id = '0';
 const int buffer_size = 150;
 static int prefluff = 10;
 static int postfluff = 10;
+
+static int* sensmat = NULL;
 
 void switchEle(int *list, int item1, int item2);
 void print1dArray(int *list, int dim);
@@ -55,13 +57,13 @@ int mainloop(void) {
         if (found == 0)
             analyseFrame(frm);
 
-        if ( ((frm->index % adj_rate) == 0) && !found )
-            adjustSensitivity(frm, 10, 0);
+        //if ( ((frm->index % adj_rate) == 0) && !found )
+        //    adjustSensitivity0(frm, 10, 0);
 
-        printf("!!! END OF METEOR !!! ###################################### : %i\n", endOfMeteor(frm, depth));
 
         if ( endOfMeteor(frm, depth) && !found ) {
 	    lifetime = endOfMeteor(frm, depth);
+            printf("!!! END OF METEOR !!! ###################################### : %i\n", endOfMeteor(frm, depth));
             found = 1;
         }
 
@@ -88,15 +90,23 @@ int mainloop(void) {
 
 
 int main(int argc,char* argv[]){
+    printf("Starting test!\n");
     input = argv[1];
     frm = buildBuffer(buffer_size); // generate cyclicalc buffer of size "buffer_size" frames
     read_video(input, frm); // invoke the read_video() function in order to fill generated buffer with frames from "input"
+    printf("Loaded video!\n");
 
+    initSensmat(rate);
+    printf("Initialized sensitivity matrix!\n");
+
+    printf("Mainloop started!\n");
     mainloop(); // start the main loop
 
     if(frm->index == 150) {
         freeBuffer(frm);
     }
     return 0;
+
+    free(sensmat);
 }
 

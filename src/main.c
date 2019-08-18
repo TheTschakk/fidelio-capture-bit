@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <pthread.h>
 
 #define HEIGHT 480
 #define WIDTH 720
@@ -53,20 +54,56 @@ struct image *revertFrames(struct image *frm, int N);
 #include "io.h"
 #include "ctrl.h"
 
-int mainloop (time_t exectime) {
-    int i,n=0;
+void *routine (void *void_frm) {
+    int n=0;
     int found=0;
     int lifetime;
 
+    struct image *frm = (struct image *) void_frm;
+
+    pthread_join(frm->prev->thread_id, NULL);
+
+    if ( (found == 0 ) && ( getLongest(frm->prev) <= (buffer_size-2) ) ) 
+        analyseFrame(frm);
+
+    if ( ((frm->index % adj_rate) == 0) && !found )
+        adjustSensitivity0(frm, adj_rate, 1);
+
+    if ( endOfMeteor(frm, depth) && !found ) {
+        lifetime = endOfMeteor(frm, depth);
+        found = 1;
+        printf("lifetime = %i\n", lifetime);
+    }
+
+    if (found)
+        n++;
+
+    if (n > postfluff) {
+        printf("saving video\n");
+        write_video(frm, lifetime);
+        n = 0;
+        found = 0;
+        lifetime = 0;
+    }
+
+    //printf("num %i\n", (frm->Nlght + frm->Nshdw));
+    printImage(frm);
+    
+    return NULL;
+}
+
+
+int mainloop (time_t exectime) {
+    int i;
     time_t start = time(NULL);
     time_t end = start + exectime;
 
     for (i=0; i<buffer_size; i++) {
-	printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
+        printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
         wait_for_frame();
         identifyPix(frm); // need to do something, otherwise same frame will be fetched all over again
         frm = frm->next;
-	initFrame(frm);
+        initFrame(frm);
     }
 
     while (time(NULL) < end) {
@@ -75,31 +112,7 @@ int mainloop (time_t exectime) {
         wait_for_frame();
         clock_gettime(CLOCK_REALTIME, &(frm->time));
 
-        if ( (found == 0 ) && ( getLongest(frm->prev) <= (buffer_size-2) ) ) 
-            analyseFrame(frm);
-
-	if ( ((frm->index % adj_rate) == 0) && !found )
-           adjustSensitivity0(frm, adj_rate, 1);
-
-        if ( endOfMeteor(frm, depth) && !found ) {
-            lifetime = endOfMeteor(frm, depth);
-            found = 1;
-            printf("lifetime = %i\n", lifetime);
-        }
-
-        if (found)
-            n++;
-
-        if (n > postfluff) {
-            printf("saving video\n");
-            write_video(frm, lifetime);
-            n = 0;
-            found = 0;
-            lifetime = 0;
-        }
-
-        //printf("num %i\n", (frm->Nlght + frm->Nshdw));
-        printImage(frm);
+        pthread_create(&(frm->thread_id), NULL, routine, frm);
 
         frm = frm->next;
     }
@@ -116,9 +129,9 @@ int main(int argc, char* argv[]) {
     time = time_int;
 
     if ( argc > 2 )
-	    dev_name = argv[2];
+        dev_name = argv[2];
     else
-	    dev_name = getenv("METDEV");
+        dev_name = getenv("METDEV");
 
     cam_id = getenv("CAMID")[0];
 

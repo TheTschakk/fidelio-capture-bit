@@ -8,8 +8,8 @@ source "$HOME/metconf"
 ### compile C code ###
 
 echo 'Step 2: Compiling C code'
-#gcc -o test src/test.c -O3 -g -lm -Wall
-gcc -o $METHOME/main $METHOME/src/main.c -O3 -g -lm -Wall
+#gcc -o test src/test.c -O3 -g -lm -lpthread -Wall
+gcc -o $METHOME/main $METHOME/src/main.c -O3 -g -lm -lpthread -Wall
 
 
 ### set up crontab ###

@@ -6,6 +6,7 @@
 struct image {
     int index;
     struct timespec time;
+    pthread_t thread_id;
     unsigned char *data;
     int Nlght;
     int Nshdw;
