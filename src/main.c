@@ -100,12 +100,12 @@ int mainloop (time_t exectime) {
 		wait_for_frame();
 		clock_gettime(CLOCK_REALTIME, &(frm->time));
         
-        printf("%lld.%.9ld\n", (long long) frm->time.tv_sec, frm->time.tv_nsec);
+        //printf("%lld.%.9ld\n", (long long) frm->time.tv_sec, frm->time.tv_nsec);
 
         if ( found != 1 ) {
 		    frm->thread_status = pthread_create(&(frm->thread_id), NULL, routine, frm);
             if ( frm->thread_status != 0 ) {
-                perror("Error creating thread: ");
+                perror("Error creating thread");
             }
         }
 

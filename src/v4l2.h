@@ -1,14 +1,8 @@
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
-struct buffer {
-    void *start;
-    size_t length;
-};
-
-struct buffer *buffers;
-static unsigned int n_buffers;
-
+static size_t buffer_length;
+static void *buffer_start;
 
 static int xioctl(int fd, int request, void *arg) {
     int r;
@@ -60,7 +54,7 @@ int init_mmap(int fd) {
     struct v4l2_requestbuffers req;
     CLEAR(req);
 
-    req.count = 4;
+    req.count = 1;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
 
@@ -69,24 +63,22 @@ int init_mmap(int fd) {
         return 1;
     }
 
-    buffers = calloc(req.count, sizeof(*buffers));
 
-    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
-        struct v4l2_buffer buf;
-        CLEAR(buf);
+    struct v4l2_buffer buf;
+    CLEAR(buf);
 
-        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        buf.memory = V4L2_MEMORY_MMAP;
-        buf.index = n_buffers;
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = 0;
 
-        if (-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf)) {
-            perror("Querying Buffer 1");
-            return 1;
-        }
-
-        buffers[n_buffers].length = buf.length;
-        buffers[n_buffers].start = mmap(NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    if (-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf)) {
+        perror("Querying Buffer 1");
+        return 1;
     }
+
+    buffer_length = buf.length;
+    buffer_start = mmap(NULL, buffer_length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
+    memset(buffer_start, 0, buffer_length);
 
     return 0;
 }
@@ -94,21 +86,18 @@ int init_mmap(int fd) {
 
 int start_grabbing(void) {
 
-    unsigned int i;
     enum v4l2_buf_type type;
 
-    for (i = 0; i < n_buffers; ++i) {
-        struct v4l2_buffer buf;
-        CLEAR(buf);
+    struct v4l2_buffer buf;
+    CLEAR(buf);
 
-        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        buf.memory = V4L2_MEMORY_MMAP;
-        buf.index = i;
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = 0;
 
-        if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
-            perror("Queue Buffer");
-            return 1;
-        }
+    if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
+        perror("Queue Buffer");
+        return 1;
     }
 
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -150,9 +139,10 @@ int read_frame(void) {
         }
     }
 
-    assert(buf.index < n_buffers);
+    //printf("Bufindex: %i\n", buf.index);
+    //assert(buf.index < n_buffers);
 
-    process_frame(buffers[buf.index].start);
+    process_frame(buffer_start);
 
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
         perror("Queue Buffer 2");
@@ -192,15 +182,12 @@ int stop_grabbing(void) {
 }
 
 int uninit_device(void) {
-    unsigned int i;
 
-    for (i = 0; i < n_buffers; ++i)
-        if (-1 == munmap(buffers[i].start, buffers[i].length)) {
-            perror("munmap");
-            return 1;
-        }
+    if (-1 == munmap(buffer_start, buffer_length)) {
+        perror("munmap");
+        return 1;
+    }
 
-    free(buffers);
     return 0;
 }
 

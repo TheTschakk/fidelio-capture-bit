@@ -29,7 +29,7 @@ int analyseFrame(struct image *img) {
     }
 
     if ( img->prev->thread_status != -1 ) {
-        perror("Error joining thread: ");
+        perror("Error joining thread");
     }
 
     initFrame(img);
