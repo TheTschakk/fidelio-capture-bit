@@ -155,7 +155,7 @@ int read_frame(void) {
     process_frame(buffers[buf.index].start);
 
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
-        perror("Query Buffer 2");
+        perror("Queue Buffer 2");
         return 1;
     }
     return 1;

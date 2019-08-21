@@ -7,6 +7,7 @@ struct image {
     int index;
     struct timespec time;
     pthread_t thread_id;
+    int thread_status;
     unsigned char *data;
     int Nlght;
     int Nshdw;
@@ -49,10 +50,10 @@ void addMeteor(struct meteor *met) {
     met->continuity = 0;
     met->duration = 0;
 }
-    
+
 struct image *buildBuffer(int size){
 
-	int i,j;
+    int i,j;
 
     struct image *start = malloc(sizeof(struct image));
     struct image *tmp = NULL;
@@ -61,6 +62,7 @@ struct image *buildBuffer(int size){
 
     for (i=1; i<=size; i++) {
 
+        img->thread_status = -1;
         img->prev = tmp;
         img->index = i;
         img->Nlght = 0;
@@ -161,7 +163,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
         img = img->prev;
         for (j=0; j<(img->num); j++) {
             if ( ((met->posX - img->met[j]->posX) * (met->posX - img->met[j]->posX) +
-                  (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
+                        (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
                 met->prev = img->met[j];
                 if (img->met[j]->next == NULL) img->met[j]->next = met;
                 met->continuity = deg;
@@ -173,7 +175,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
             break; // breaks outer for-loop
         }
     }
-    printf("prev --%p-- / next --%p--\n", met->prev, met->next);
+    //printf("prev --%p-- / next --%p--\n", met->prev, met->next);
 }
 
 void getVelocity(struct meteor *met0) {
@@ -245,7 +247,7 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
         struct meteor *fin = ref->met[i];
 
         while (fin->next != NULL) {
-		printf("finptr %p --> %p\n", fin, fin->next);
+            //printf("finptr %p --> %p\n", fin, fin->next);
             fin = fin->next;
         }
 
@@ -279,19 +281,19 @@ void printImage(struct image *img) {
            printf("SHADOW: ");
            print1dArray(img->met[i]->shdw, img->met[i]->Nshdw);
            printf("\n");
-           */
+         */
         //printf("\n");
     }
 }
 
 int getLongest(struct image *img) {
-	int i;
-	int duration=0;
+    int i;
+    int duration=0;
 
-	for (i=0; i<(img->num); i++) {
-		if (img->met[i]->duration > duration)
-			duration = img->met[i]->duration;
-	}
+    for (i=0; i<(img->num); i++) {
+        if (img->met[i]->duration > duration)
+            duration = img->met[i]->duration;
+    }
 
-	return duration;
+    return duration;
 }
