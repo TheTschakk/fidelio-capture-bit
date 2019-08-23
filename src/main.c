@@ -55,7 +55,6 @@ struct image *revertFrames(struct image *frm, int N);
 #include "ctrl.h"
 
 int n=0;
-int found=0;
 int lifetime;
 
 void *routine (void *void_img) {
@@ -63,15 +62,15 @@ void *routine (void *void_img) {
 
 	//pthread_join(img->prev->thread_id, NULL);
 
-	if ( (found == 0 ) && ( getLongest(img->prev) <= (buffer_size-2) ) ) 
+	if ( getLongest(img->prev) <= (buffer_size-2) ) // still unstable towards to long events
 		analyseFrame(img);
 
-	if ( ((img->index % adj_rate) == 0) && !found && (img->num == 0) )
+	if ( ((img->index % adj_rate) == 0) && (n == 0) && (img->num == 0) )
 		adjustSensitivity0(img, adj_rate, 1);
 
-	if ( endOfMeteor(img, depth) && !found ) {
+	if ( endOfMeteor(img, depth) && (n == 0) ) {
 		lifetime = endOfMeteor(img, depth);
-		found = 1;
+		n = 1;
 		printf("lifetime = %i\n", lifetime);
 	}
 
@@ -102,21 +101,20 @@ int mainloop (time_t exectime) {
         
         //printf("%lld.%.9ld\n", (long long) frm->time.tv_sec, frm->time.tv_nsec);
 
-        if ( found != 1 ) {
+        if ( 1 ) {
 		    frm->thread_status = pthread_create(&(frm->thread_id), NULL, routine, frm);
             if ( frm->thread_status != 0 ) {
                 perror("Error creating thread");
             }
         }
 
-        if (found)
+        if ( n > 0)
             n++;
 
         if (n > postfluff) {
             printf("saving video\n");
             write_video(frm, lifetime);
             n = 0;
-            found = 0;
             lifetime = 0;
         }
 
@@ -147,7 +145,7 @@ int main(int argc, char* argv[]) {
     frm = buildBuffer(buffer_size);
     printf("camera -%c- using %s!\n", cam_id, dev_name);
 
-    fd = open(dev_name, O_RDWR | O_NONBLOCK, 0);
+    fd = open(dev_name, O_RDWR/* | O_NONBLOCK*/, 0);
 
     if (fd == -1) {
         perror("Opening video device");

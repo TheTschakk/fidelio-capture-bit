@@ -122,11 +122,15 @@ int process_frame(unsigned char *yuyv) {
 int read_frame(void) {
 
     struct v4l2_buffer buf;
+    //struct timespec time;
 
     CLEAR(buf);
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
+
+    //printf("FRAME -- %3i\t", frm->index);
+    //clock_gettime(CLOCK_REALTIME, &time); printf("%lld.%.9ld\t", (long long) time.tv_sec, time.tv_nsec); 
 
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
@@ -139,15 +143,18 @@ int read_frame(void) {
         }
     }
 
+    //clock_gettime(CLOCK_REALTIME, &time); printf("%lld.%.9ld\t", (long long) time.tv_sec, time.tv_nsec); 
     //printf("Bufindex: %i\n", buf.index);
     //assert(buf.index < n_buffers);
 
     process_frame(buffer_start);
 
+    //clock_gettime(CLOCK_REALTIME, &time); printf("%lld.%.9ld\t", (long long) time.tv_sec, time.tv_nsec); 
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf)) {
         perror("Queue Buffer 2");
         return 1;
     }
+    //clock_gettime(CLOCK_REALTIME, &time); printf("%lld.%.9ld\n", (long long) time.tv_sec, time.tv_nsec); 
     return 1;
 }
 
