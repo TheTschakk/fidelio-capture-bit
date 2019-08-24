@@ -32,7 +32,7 @@ const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; // left, right, top and bo
 
 char *dev_name = "/dev/video0"; // camera video device path
 char cam_id = '?'; // id number of camera in the network (one of '0', '1', '2', ...)
-const int buffer_size = 700; // size of the frame buffer in number of frames
+const int buffer_size = 1000; // size of the frame buffer in number of frames
 static int prefluff = 25; // number of frames to save before an event
 static int postfluff = 25; // number of frames to save after an event
 

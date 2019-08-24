@@ -156,6 +156,7 @@ void initFrame(struct image *img) {
 
 void assignContinuity(struct image *img, struct meteor *met, int dist, int depth) {
     int deg, j;
+    int found=0;
 
     met->continuity = 0;
 
@@ -164,18 +165,20 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
         for (j=0; j<(img->num); j++) {
             if ( ((met->posX - img->met[j]->posX) * (met->posX - img->met[j]->posX) +
                         (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
-                met->prev = img->met[j];
-                if (img->met[j]->next == NULL) img->met[j]->next = met;
-                met->continuity = deg;
-                break; // breaks inner for-loop
+                if ( found == 0 ) {
+                    found = 1;
+                    met->prev = img->met[j];
+                    met->continuity = deg;
+                    met->duration = img->met[j]->duration + met->continuity;
+                }
+
+                if (img->met[j]->next == NULL) {
+                    img->met[j]->next = met;
+                }
             }
         }
-        if (met->continuity > 0) {
-            met->duration = img->met[j]->duration + met->continuity;
-            break; // breaks outer for-loop
-        }
     }
-    //printf("prev --%p-- / next --%p--\n", met->prev, met->next);
+//printf("prev --%p-- / next --%p--\n", met->prev, met->next);
 }
 
 void getVelocity(struct meteor *met0) {
