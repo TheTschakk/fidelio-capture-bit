@@ -36,6 +36,7 @@ struct meteor {
     float direction;
     int continuity;
     int duration;
+    float persistence;
     struct meteor *prev;
     struct meteor *next;
 };
@@ -222,8 +223,8 @@ void getVelocity(struct meteor *met0) {
     met0->v2 = vx*vx + vy*vy;
     //met0->R = Rx*Ry;
     met0->R = vx/(vx+vy) * Rx + vy/(vx+vy) * Ry;
-
     met0->direction = atan2(vx, vy);
+    if ( n ) met0->persistence = met0->continuity / n;
 }
 
 int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors and returns duration of longest meteor
@@ -267,6 +268,9 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
     if ( isnan(ref->met[num]->v2) || ( ref->met[num]->R < 0.1 ) )
         return 0;
 
+    if ( ref->met[num]->persistence < 0.2 )
+        return 0;
+
     printf("dur/v2/R = %i / %f / %f\n", dur, ref->met[num]->v2, ref->met[num]->R);
     return dur;
 }
@@ -277,7 +281,7 @@ void printImage(struct image *img) {
     //printf("Nlgth %i | Nshdw %i || Nmet %i \n\n", img->Nlght, img->Nshdw, img->num);
 
     for (i=0; i<(img->num); i++) {
-        printf("meteor =%i= || num = %i | postion: X = %.1f, Y = %.1f | velocity: vx = %.2f, vy = %.2f, v2 = %.1f (R=%.4f) | continuity = %i | duration = %i\n", i, img->met[i]->Nlght + img->met[i]->Nshdw, img->met[i]->posX, img->met[i]->posY, img->met[i]->vx, img->met[i]->vy, img->met[i]->v2, img->met[i]->R, img->met[i]->continuity, img->met[i]->duration);
+        printf("meteor =%i= || num = %i | postion: X = %.1f, Y = %.1f | velocity: vx = %.2f, vy = %.2f, v2 = %.1f (R=%.4f) | continuity = %i | duration = %i : %f\n", i, img->met[i]->Nlght + img->met[i]->Nshdw, img->met[i]->posX, img->met[i]->posY, img->met[i]->vx, img->met[i]->vy, img->met[i]->v2, img->met[i]->R, img->met[i]->continuity, img->met[i]->duration, img->met[i]->persistence);
         /*
            printf("LIGHT: ");
            print1dArray(img->met[i]->lght, img->met[i]->Nlght);
