@@ -25,7 +25,7 @@
 const int rate = 100; // multiplier for adaptive sensitivity matrix, high "rate" results in slower adjustment
 int delta = 70; // inititial value of pixel value delta
 const int adj_rate = 100; // sensitivity adjustment interval in frames
-const int cutoff = 10; // distance cutoff for clustering
+const int cutoff = 20; // distance cutoff for clustering
 const int depth = 20; // frame depth for continuity search
 const int brightness = 150; // maximum allowed mean brightness (images with to bright background won't be processed)
 const int margins[4] = {10, WIDTH-10, 10, HEIGHT-10}; // left, right, top and bottom margine (currently all 10 px)
@@ -58,51 +58,44 @@ int n=0;
 int lifetime;
 
 void *routine (void *void_img) {
-	struct image *img = (struct image *) void_img;
+    struct image *img = (struct image *) void_img;
 
-	//pthread_join(img->prev->thread_id, NULL);
+    if ( getLongest(img->prev) <= (buffer_size-2) ) // still unstable towards to long events
+        analyseFrame(img);
 
-	if ( getLongest(img->prev) <= (buffer_size-2) ) // still unstable towards to long events
-		analyseFrame(img);
+    if ( ((img->index % adj_rate) == 0) && (n == 0) && (img->num == 0) )
+        adjustSensitivity0(img, adj_rate, 1);
 
-	if ( ((img->index % adj_rate) == 0) && (n == 0) && (img->num == 0) )
-		adjustSensitivity0(img, adj_rate, 1);
+    if ( endOfMeteor(img, depth) && (n == 0) ) {
+        lifetime = endOfMeteor(img, depth);
+        n = 1;
+        printf("lifetime = %i\n", lifetime);
+    }
 
-	if ( endOfMeteor(img, depth) && (n == 0) ) {
-		lifetime = endOfMeteor(img, depth);
-		n = 1;
-		printf("lifetime = %i\n", lifetime);
-	}
+    printImage(img);
 
-	//printf("num %i\n", (img->Nlght + img->Nshdw));
-	printImage(img);
-
-	return NULL;
+    return NULL;
 }
 
 int mainloop (time_t exectime) {
-	int i;
-	time_t start = time(NULL);
-	time_t end = start + exectime;
+    int i;
+    time_t start = time(NULL);
+    time_t end = start + exectime;
 
-	for (i=0; i<buffer_size; i++) {
-		printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
-		wait_for_frame();
-		identifyPix(frm); // need to do something, otherwise same frame will be fetched all over again
-		frm = frm->next;
-		initFrame(frm);
-	}
+    for (i=0; i<buffer_size; i++) {
+        printf("Filling buffer %3.i/%3.i\r", i, buffer_size);
+        wait_for_frame();
+        identifyPix(frm); // need to do something, otherwise same frame will be fetched all over again
+        frm = frm->next;
+        initFrame(frm);
+    }
 
-	while (time(NULL) < end) {
-		//printf("frame %i ################################################\n", frm->index);
-		//printf("time %li/%li sec\n", time(NULL)-start, end-start);
-		wait_for_frame();
-		clock_gettime(CLOCK_REALTIME, &(frm->time));
-        
-        //printf("%lld.%.9ld\n", (long long) frm->time.tv_sec, frm->time.tv_nsec);
+    while (time(NULL) < end) {
+        wait_for_frame();
+        clock_gettime(CLOCK_REALTIME, &(frm->time));
 
-        if ( 1 ) {
-		    frm->thread_status = pthread_create(&(frm->thread_id), NULL, routine, frm);
+        if ( 1 ) { // spawn new thread
+            frm->thread_status = pthread_create(&(frm->thread_id), NULL, routine, frm);
             if ( frm->thread_status != 0 ) {
                 perror("Error creating thread");
             }
@@ -119,7 +112,7 @@ int mainloop (time_t exectime) {
         }
 
 
-        usleep(20000);
+        usleep(20000); // sleep 20 ms to make sure to fetch next frame
 
         frm = frm->next;
     }
