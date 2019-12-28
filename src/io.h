@@ -48,7 +48,7 @@ int write_video(struct image *img, int nfrms) {
     }
 
     FILE *log = fopen("log.txt", "a");
-    fprintf(log, "%s:\n", name);
+    fprintf(log, "%s ", name);
 
     for (i=0; i<(img->num); i++) {
         fprintf(log, "%f %.4f %.4f %.4f %i\n", N[i], img->met[i]->v2, img->met[i]->R, img->met[i]->direction, img->met[i]->duration);
