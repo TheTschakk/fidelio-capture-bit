@@ -157,7 +157,6 @@ void initFrame(struct image *img) {
 
 void assignContinuity(struct image *img, struct meteor *met, int dist, int depth) {
     int deg, j;
-    //int found=0;
 
     met->continuity = 0;
 
@@ -166,8 +165,7 @@ void assignContinuity(struct image *img, struct meteor *met, int dist, int depth
         for (j=0; j<(img->num); j++) {
             if ( ((met->posX - img->met[j]->posX) * (met->posX - img->met[j]->posX) +
                         (met->posY - img->met[j]->posY) * (met->posY - img->met[j]->posY)) < (deg * dist*dist) ) { // only scales with sqrt(deg)
-                if ( met->prev == NULL ) {
-                    //found = 1;
+                if ( met->prev == NULL ) { // assign met->prev pointer to first met in the past
                     met->prev = img->met[j];
                     met->continuity = deg;
                     met->duration = img->met[j]->duration + met->continuity;
@@ -233,30 +231,14 @@ int endOfMeteor(struct image *img, int depth) { // identifies terminated meteors
 
     struct image *ref = img;
 
-    //printf("Starting from Img %i\n", ref->index);
     ref = revertFrames(ref, depth);
-    //rintf("Going to Img %i\n", ref->index);
 
     for (i=0; i<(ref->num); i++) {
-
-        //printf("METEOR --%i-- | NEXT --%p-- | PREV --%p--\n", i, ref->met[i]->next, ref->met[i]->prev);
 
         if ( (ref->met[i]->next == NULL) && (ref->met[i]->duration > dur) ) {
             num = i;
             dur = ref->met[num]->duration;
             continue;
-        }
-
-        struct meteor *fin = ref->met[i];
-
-        while (fin->next != NULL) {
-            //printf("finptr %p --> %p\n", fin, fin->next);
-            fin = fin->next;
-        }
-
-        if ( fin->duration > dur ) {
-            dur = fin->duration;
-            num = -1;
         }
     }
 
