@@ -1,0 +1,7 @@
+Parameter für Sekundärauswertung
+
+1. durchschnittliche Pixelanzahl des Ereignisses
+2. Geschwindigkeit
+3. "Geradlinigkeit" - 1 = "Das Objekt legt eine perfekte Gerade zurück", 0 = "Das Objekt fliegt Slalom"
+4. Flugrichtung (Winkel im Bogenmaß)
+5. zeitliche Dauer des Events 
